@@ -154,10 +154,10 @@ table days atag@(tag : tags) =
 --
 testTable = do 
 --        daten <- readL "testHtml2.html"
-        daten <- readL "../vorlage/s_bai6_unix.html"
---        print $ searchTR (tail (fst $ tableHead $ parseTags daten)) (snd (tableHead (parseTags daten)))
-        print $ printSlots $ searchTR (tail (fst $ tableHead $ parseTags daten)) 
-                                      (snd (tableHead (parseTags daten)))
+        daten <- readL "s_bai6_unix.html"
+        print $ searchTR (tail (fst $ tableHead $ parseTags daten)) (snd (tableHead (parseTags daten)))
+--        print $ printSlots $ searchTR (tail (fst $ tableHead $ parseTags daten)) 
+--                                      (snd (tableHead (parseTags daten)))
 
 --    where
 --     slots = searchTR (tail (fst $ tableHead $ parseTags daten)) (snd (tableHead (parseTags daten)))
