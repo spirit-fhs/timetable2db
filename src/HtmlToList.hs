@@ -145,10 +145,10 @@ table days atag@(tag : tags) =
 --
 --
 -- printSlots :: [(String, [(String, [[String]])])] -> String
-printSlots [] = return ()
-printSlots ( (day : days) : slots ) = do
-       print day
-       printSlots (days, slots)
+--printSlots [] = return ()
+--printSlots ( (day : days) : slots ) = do
+--       print day
+--       printSlots (days, slots)
 --
 --
 --
