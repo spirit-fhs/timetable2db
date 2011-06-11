@@ -152,9 +152,10 @@ table days atag@(tag : tags) =
 --
 --
 --
-testTable = do 
+testTable filePath = do 
 --        daten <- readL "testHtml2.html"
-        daten <- readL "s_bai6_unix.html"
+--        daten <- readL "s_bai6_unix.html"
+        daten <- readL filePath
         print $ searchTR (tail (fst $ tableHead $ parseTags daten)) (snd (tableHead (parseTags daten)))
 --        print $ printSlots $ searchTR (tail (fst $ tableHead $ parseTags daten)) 
 --                                      (snd (tableHead (parseTags daten)))
