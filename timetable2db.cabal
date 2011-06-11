@@ -1,0 +1,20 @@
+Name:                tutUebung5
+Version:             0.1
+Synopsis:            Kurz Beschreibung
+License:             BSD3
+Author:              Christian Linde
+Maintainer:          linde.chris@gmail.com
+Category:            Misc
+Build-type:          Simple
+Cabal-version:       >=1.2
+Description:         Ausfuehrliche Beschreibung
+
+Libarary {
+
+}
+
+Executable tutUebung5
+  hs-source-dirs:    src
+  Main-is:           main.hs
+  Build-depends:     base >= 4.2 && < 5
+
