@@ -6,6 +6,8 @@ import System.Environment
 --
 main = do
    (filePath : args) <- getArgs
-   testTable filePath
+--   testTableByFile filePath
+   daten <- readL filePath
+   print $tableList daten
 --
 --

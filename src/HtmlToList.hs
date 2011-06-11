@@ -1,4 +1,7 @@
-module HtmlToList where
+module HtmlToList ( testTableByFile
+                  , readL 
+                  , tableList 
+                  ) where
 --
 --
 import Text.HTML.TagSoup
@@ -10,18 +13,12 @@ testTableContent :: TableContent
 testTableContent = TableContent { content = [" ","Vorlesung","DBS\160V1","WKST\160","g","\160\&1","Knolle "] }
 --
 --
--- data TableTD = TableTD1 { < TableContent }
---             | TableTD {  }
---
---
---
 readL :: FilePath -> IO String
-readL file = do
-        daten <- readFile file
-        return daten
+readL file = readFile file
 --
 --
---
+-- | Read the head of the table.
+--  In the table the head includes the days of the week.
 tableHead :: [Tag [Char]] -> ([String], [Tag String])
 tableHead (tag : tags) =
      case tag of
@@ -29,7 +26,7 @@ tableHead (tag : tags) =
       TagClose "TR" -> ([], tags)
       _ -> tableHead tags
 --
---
+-- | Search one text element.
 tableText' (tag : tags) =
      case tag of
       TagText text -> text
@@ -38,7 +35,7 @@ tableText' (tag : tags) =
 --
 -- ==============================================================================
 --
---
+-- | Search the time of the table line.
 findTime (tag : tags) =
      case tag of
       TagOpen "TD" content -> ((tableText' tags), tags)
@@ -62,7 +59,6 @@ readSlots days (tag : tags) =
      case tag of
       TagOpen "TD" content -> (((fst (tableTDText tags)) : (fst rek)), (snd rek))
       TagClose "TABLE" -> ([], tags)
---      TagClose "TR" -> ([], tags)
       _ -> readSlots days tags
    where 
     rek = (readSlots days (snd (tableTDText tags)))
@@ -71,39 +67,22 @@ readSlots days (tag : tags) =
 tableTD :: [String] -> [Tag String] -> ([[String]], [Tag String])
 tableTD days (tag : tags) =
      case tag of
---      TagOpen "TABLE" content -> ( ((fst rek) ++ (fst (tableTD days (snd rek))))
---                                 , (snd (tableTD days (snd rek)))
---                                 )
---      TagOpen "TABLE" content -> ((fst (readSlots days tags)), tags)
---      TagClose "TABLE" -> ([], tags)
---
       -- ^ Rekursion ist hier erforderlich, da bis zum /TD gelesen werden muss, dass nach dem /TABLE kommt.
       -- Sonst passiert es das Zeichen doppelt gelesen werden.
       TagOpen "TABLE" content -> (((fst rek) ++ (fst td)), (snd td))
---      TagOpen "TABLE" content -> ((fst rek), tags)
       TagClose "TD" -> ([], tags)
---      TagClose "TABLE" -> ([], tags)
       _ -> tableTD days tags
    where
     rek = readSlots days tags
     td  = tableTD days (snd rek)
 --
 --
---searchTable :: [String] -> [Tag String] -> ([[String]], [Tag String])
---searchTable days (tag : tags) =
---     case tag of
---      TagOpen  "TD" content -> tableTD 
---      
---
---
 tableTR :: [String] -> [Tag String] -> ([(String, [[String]])], [Tag String])
---tableTR [] _ = ([], [])
 tableTR days (tag : tags) =
      case tag of
       -- ^ Baut ein Tuppel das den Tag und die Liste von Slots beinhaltet, die an diesem Tag statt finden.
       TagOpen  "TD" content -> ((((head days), (fst td)) : (fst tr)), 
                                 (snd tr))
---      TagOpen  "TD" content -> ((((head days), (fst td)) : (fst (tableTR (tail days) tags)) ), tags)
       TagClose "TR" -> ([], tags)
       TagClose "TD" -> ([], tags)
       _ -> tableTR days tags
@@ -121,12 +100,9 @@ skipFirstTD days atags@(tag : tags) =
 --
 --
 searchTR :: [String] -> [Tag String] -> ([(String, [(String, [[String]])])], [Tag String])
--- searchTR [] _ = ([], [])
 searchTR days (tag : tags) =
      case tag of
       TagOpen "TR" content -> ((( time, slot) : (fst rekursion)), ( snd rekursion ))
---      TagOpen "TR" content -> ((( "TIME", slot) : (fst rekursion)), ( snd rekursion ))
---      TagClose "TR" -> ([], tags)     -- ^ Fuer den fall, dass keine Zeile in der Tabelle ist.
       TagClose "TABLE" -> ([], tags)  -- ^ Fuer den fall, dass ein sauberes ende vollzogen werden kann.
       _ -> searchTR days tags
     where
@@ -136,11 +112,11 @@ searchTR days (tag : tags) =
      rekursion = searchTR days restPars
 --
 --
-table :: [String] -> [Tag String] -> ([(String, [(String, [[String]])])], [Tag String])
-table days atag@(tag : tags) = 
-     case tag of
-      TagOpen "TABLE" content -> searchTR days tags
-      _ -> table days tags
+--table :: [String] -> [Tag String] -> ([(String, [(String, [[String]])])], [Tag String])
+--table days atag@(tag : tags) = 
+--     case tag of
+--      TagOpen "TABLE" content -> searchTR days tags
+--      _ -> table days tags
 --
 --
 --
@@ -150,25 +126,15 @@ table days atag@(tag : tags) =
 --       print day
 --       printSlots (days, slots)
 --
+tableList :: String -> ([(String, [(String, [[String]])])], [Tag String])
+tableList daten = searchTR (tail (fst $ tableHead $ parseTags daten)) (snd (tableHead (parseTags daten)))
 --
 --
-testTable filePath = do 
+testTableByFile filePath = do 
 --        daten <- readL "testHtml2.html"
 --        daten <- readL "s_bai6_unix.html"
         daten <- readL filePath
         print $ searchTR (tail (fst $ tableHead $ parseTags daten)) (snd (tableHead (parseTags daten)))
---        print $ printSlots $ searchTR (tail (fst $ tableHead $ parseTags daten)) 
---                                      (snd (tableHead (parseTags daten)))
-
---    where
---     slots = searchTR (tail (fst $ tableHead $ parseTags daten)) (snd (tableHead (parseTags daten)))
---        print $ (table (tail (fst $ tableHead $ parseTags daten))
---                       (snd (tableHead (parseTags daten))))
---        print "\n"
---        print $ snd (tableHead (parseTags daten))
---
--- testUnit = 
---
 --
 --
 printHead = do
@@ -182,12 +148,5 @@ printHtml = do
 --        daten <- readL "s_bai6_unix.html"
         print $ parseTags daten
 --
---
-{-
- [TagOpen "TABLE" [("BORDER","1"),("WIDTH","100%"),("cellspacing","0"),("bordercolordark","#FFFFFF")],TagOpen "TR" [("align","center")],TagOpen "TD" [],TagOpen "font" [("color","#A52A2A")],TagText " ",TagOpen "img" [("border","0"),("src","bilder/monitor.gif"),("width","17"),("height","17")],TagText "DBS\160V1",TagOpen "BR" [],TagText "WKST\160",TagOpen "B" [],TagText "g",TagClose "B",TagText "\160\&1",TagOpen "BR" [],TagText "Knolle ",TagClose "font",TagClose "TD",TagOpen "TD" [],TagOpen "font" [("color","#2D71FF")],TagText " ",TagOpen "img" [("border","0"),("src","bilder/monitor.gif"),("width","17"),("height","17")],TagText "DBS\160V1",TagOpen "BR" [],TagText "WKST\160",TagOpen "B" [],TagText "u",TagClose "B",TagText "\160\&2",TagOpen "BR" [],TagText "Knolle ",TagClose "font",TagClose "TD",TagClose "TR",TagText "\r\n",TagOpen "TR" [("align","center")],TagOpen "TD" [],TagOpen "font" [("color","#2D71FF")],TagText " ",TagOpen "img" [("border","0"),("src","bilder/monitor.gif"),("width","17"),("height","17")],TagText "SWEProg\160V3",TagOpen "BR" [],TagText "PC2\160",TagOpen "B" [],TagText "u",TagClose "B",TagText "\160\&1",TagOpen "BR" [],TagText "Braun ",TagClose "font",TagClose "TD",TagOpen "TD" [],TagOpen "font" [("color","#A52A2A")],TagText " ",TagOpen "img" [("border","0"),("src","bilder/monitor.gif"),("width","17"),("height","17")],TagText "SWEProg\160V3",TagOpen "BR" [],TagText "PC2\160",TagOpen "B" [],TagText "g",TagClose "B",TagText "\160\&2",TagOpen "BR" [],TagText "Braun ",TagClose "font",TagClose "TD",TagClose "TR",TagText "\r\n",TagClose "TABLE"] 
-
-[TagOpen "font"     [("color","#A52A2A")],TagText " ",TagOpen "img" [("border","0"),("src","bilder/monitor.gif"),("width","17"),("height","17")],TagText "DBS\160V1",TagOpen "BR" [],TagT    ext "WKST\160",TagOpen "B" [],TagText "g",TagClose "B",TagText "\160\&1",TagOpen "BR" [],TagText "Knolle ",TagClose "font",TagClose "TD"]
-
--}
 --
 --
