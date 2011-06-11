@@ -1,4 +1,4 @@
-module MyTestParser7 where
+module HtmlToList where
 --
 --
 import Text.HTML.TagSoup
@@ -154,7 +154,7 @@ printSlots ( (day : days) : slots ) = do
 --
 testTable = do 
 --        daten <- readL "testHtml2.html"
-        daten <- readL "s_bai6_unix.html"
+        daten <- readL "../vorlage/s_bai6_unix.html"
 --        print $ searchTR (tail (fst $ tableHead $ parseTags daten)) (snd (tableHead (parseTags daten)))
         print $ printSlots $ searchTR (tail (fst $ tableHead $ parseTags daten)) 
                                       (snd (tableHead (parseTags daten)))

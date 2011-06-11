@@ -1,20 +1,20 @@
-Name:                tutUebung5
+Name:                timetable2db
 Version:             0.1
-Synopsis:            Kurz Beschreibung
+Synopsis:            ..
 License:             BSD3
 Author:              Christian Linde
 Maintainer:          linde.chris@gmail.com
 Category:            Misc
 Build-type:          Simple
 Cabal-version:       >=1.2
-Description:         Ausfuehrliche Beschreibung
+Description:         ..
 
 Libarary {
 
 }
 
-Executable tutUebung5
+Executable timetable2db
   hs-source-dirs:    src
   Main-is:           main.hs
-  Build-depends:     base >= 4.2 && < 5
-
+  Build-depends:     base >= 4.2 && < 5,
+                     tagsoup
