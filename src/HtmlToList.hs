@@ -126,8 +126,8 @@ searchTR days (tag : tags) =
 --       print day
 --       printSlots (days, slots)
 --
-tableList :: String -> ([(String, [(String, [[String]])])], [Tag String])
-tableList daten = searchTR (tail (fst $ tableHead $ parseTags daten)) (snd (tableHead (parseTags daten)))
+tableList :: String -> [(String, [(String, [[String]])])]
+tableList daten = fst $ searchTR (tail (fst $ tableHead $ parseTags daten)) (snd (tableHead (parseTags daten)))
 --
 --
 testTableByFile filePath = do 

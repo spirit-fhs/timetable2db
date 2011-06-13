@@ -29,8 +29,8 @@ data Day       = Montag | Dienstag | Mittwoch | Donnerstag | Freitag | Samstag |
 --
 -- The datatype TimeStamp describe the houre and minute of a day.
 --
-data TimeStamp = TimeStamp   { houre  :: Int -- ^ Stunde eines Tages
-                             , minute :: Int -- ^ Minute einer Stunde
+data TimeStamp = TimeStamp   { houre  :: String -- ^ Stunde eines Tages
+                             , minute :: String -- ^ Minute einer Stunde
                              }
                              deriving (Show, Read)
 --
@@ -59,13 +59,13 @@ data Week       = Gerade | Ungerade | Woechentlich
 -- | Beschreibt die Datenstruktur des Stundenplans. 
 --
 --
-data Lecture    = Lecture    { day      :: Day      -- ^ day of a week
+data Lecture    = Lecture    { day      :: String   -- ^ day of a week
                              , timeSlot :: TimeSlot -- ^ start and end Time of a schedule
-                             , vtype    :: VType    -- ^ describe the type of a schedule (Vorlesung,Uebung)
+                             , vtype    :: String   -- ^ describe the type of a schedule (Vorlesung,Uebung)
                              , vname    :: String   -- ^ the name of the schedule
                              , location :: Location -- ^ the location of the schedule
-                             , week     :: Week     -- ^ describe the week of a schedule (Gerade,Ungerade,Woechentlich)
-                             , group    :: Int      -- ^ describe the group of a schedule [1..]
+                             , week     :: String   -- ^ describe the week of a schedule (Gerade,Ungerade,Woechentlich)
+                             , group    :: String   -- ^ describe the group of a schedule [1..]
                              , lecturer :: String   -- ^ describe the dozent name that hold the schedule
                              }
                              deriving (Show, Read)
