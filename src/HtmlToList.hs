@@ -107,8 +107,7 @@ searchTR days (tag : tags) =
       _ -> searchTR days tags
     where
      time     = fst $ findTime tags
-     slot     = fst $ skipFirstTD days tags
-     restPars = snd $ skipFirstTD days tags
+     (slot, restPars ) = skipFirstTD days tags
      rekursion = searchTR days restPars
 --
 --

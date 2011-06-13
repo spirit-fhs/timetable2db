@@ -13,8 +13,8 @@ rekLine ( line : lines ) = (slots line) ++ (rekLine lines)
 --
 --
 slots :: (String, [(String, [[String]])]) -> TimeTable
-slots ( _ , []) = []
-slots ( time, (slot : slots) ) = (daySlot time slot)
+-- slots ( _ , []) = []
+slots ( time, (slot : slots) ) = (daySlot time slot) 
 --
 --
 daySlot :: String -> (String, [[String]]) -> TimeTable
