@@ -4,12 +4,14 @@ import IS
 import Data.Char
 --
 convertListToIS :: [(String, [(String, [[String]])])] -> TimeTable
-convertListToIS rowList = rekLine rowList
+-- convertListToIS rowList = rekLine rowList
+convertListToIS = rekLine
 --
 --
 rekLine :: [(String, [(String, [[String]])])] -> TimeTable
-rekLine [] = []
-rekLine ( line : lines ) = (slots line) ++ (rekLine lines)
+-- rekLine [] = []
+-- rekLine ( line : lines ) = (slots line) ++ (rekLine lines)
+rekLine = concatMap slots
 --
 --
 slots :: (String, [(String, [[String]])]) -> TimeTable
@@ -18,8 +20,9 @@ slots ( time, (slot : slots) ) = (daySlot time slot)
 --
 --
 daySlot :: String -> (String, [[String]]) -> TimeTable
-daySlot _ ( _, [] ) = []
-daySlot time ( slotDay, (slot : slots) ) = ((analyseSlot time slotDay slot) : ( daySlot time ( slotDay, slots )) )
+-- daySlot _ ( _, [] ) = []
+-- daySlot time ( slotDay, (slot : slots) ) = ((analyseSlot time slotDay slot) : ( daySlot time ( slotDay, slots )) )
+daySlot time ( slotDay, slots) = map (analyseSlot time slotDay) slots
 --
 --
 analyseSlot :: String -> String -> [String] -> Lecture
