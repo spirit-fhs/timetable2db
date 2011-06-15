@@ -1,5 +1,5 @@
 module HtmlToList ( testTableByFile
-                  , readL 
+--                  , readL 
                   , tableList 
                   ) where
 --
@@ -13,8 +13,8 @@ testTableContent :: TableContent
 testTableContent = TableContent { content = [" ","Vorlesung","DBS\160V1","WKST\160","g","\160\&1","Knolle "] }
 --
 --
-readL :: FilePath -> IO String
-readL file = readFile file
+-- readL :: FilePath -> IO String
+-- readL file = readFile file
 --
 --
 -- | Read the head of the table.
@@ -132,18 +132,21 @@ tableList daten = fst $ searchTR (tail (fst $ tableHead $ parseTags daten)) (snd
 testTableByFile filePath = do 
 --        daten <- readL "testHtml2.html"
 --        daten <- readL "s_bai6_unix.html"
-        daten <- readL filePath
+        daten <- readFile filePath
+--        daten <- readL filePath
         print $ searchTR (tail (fst $ tableHead $ parseTags daten)) (snd (tableHead (parseTags daten)))
 --
 --
 printHead = do
 --        daten <- readL "s_bai6_unix.html"
-        daten <- readL "testHtml2.html"
+        daten <- readFile "testHtml2.html"
+--        daten <- readL "testHtml2.html"
         print $ tableHead $ parseTags daten
 --
 --
 printHtml = do 
-        daten <- readL "testHtml2.html"
+        daten <- readFile "testHtml2.html"
+--        daten <- readL "testHtml2.html"
 --        daten <- readL "s_bai6_unix.html"
         print $ parseTags daten
 --

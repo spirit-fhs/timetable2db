@@ -8,9 +8,10 @@ import System.Environment
 main = do
    (filePath : args) <- getArgs
 --   testTableByFile filePath
-   daten <- readL filePath
+   daten <- readFile filePath
    print $ tableList daten
    print "----------------------"
-   print $ convertListToIS $ tableList daten
+--   print $ convertListToIS $ tableList daten
+   printTimeTable $ convertListToIS $ tableList daten
 --
 --

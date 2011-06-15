@@ -6,25 +6,35 @@ import Data.Char
 convertListToIS :: [(String, [(String, [[String]])])] -> TimeTable
 -- convertListToIS rowList = rekLine rowList
 convertListToIS = rekLine
+--convertListToIS _ = []
 --
---
+-- | Realisiert die Rekursion ueber die Zeilen.
 rekLine :: [(String, [(String, [[String]])])] -> TimeTable
 -- rekLine [] = []
+--rekLine ( (time, slots) : lines ) = (slotsSpliter time slots) ++ (rekLine lines)
 -- rekLine ( line : lines ) = (slots line) ++ (rekLine lines)
-rekLine = concatMap slots
+rekLine = concatMap slotsSpliter
 --
+-- | Realisiert die Rekursion ueber die Spalten.
+--slotsSpliter :: String -> [(String, [[String]])] -> TimeTable
+--slotsSpliter _ [] = []
+--slotsSpliter time (slot : slots) = slotsSpliter time slots
+
+slotsSpliter :: (String, [(String, [[String]])]) -> TimeTable
+slotsSpliter ( _ , []) = []
+slotsSpliter ( time, (slot : slots) ) = (daySlot time slot) ++ (slotsSpliter (time, slots))
+
+-- slots ( time, (slot : slots) ) = (daySlot time slot) ++ (slots (time, slots))
+-- slots ( time, (slot : slots) ) = (daySlot time slot) 
 --
-slots :: (String, [(String, [[String]])]) -> TimeTable
--- slots ( _ , []) = []
-slots ( time, (slot : slots) ) = (daySlot time slot) 
---
---
+-- | Filtert den jeweiligen Spalten Tag herraus und fuegt rekursiv die jeweiligen Lectures in eine
+-- Liste ein.
 daySlot :: String -> (String, [[String]]) -> TimeTable
--- daySlot _ ( _, [] ) = []
--- daySlot time ( slotDay, (slot : slots) ) = ((analyseSlot time slotDay slot) : ( daySlot time ( slotDay, slots )) )
-daySlot time ( slotDay, slots) = map (analyseSlot time slotDay) slots
+daySlot _ ( _, [] ) = []
+daySlot time ( slotDay, (slot : slots) ) = ((analyseSlot time slotDay slot) : ( daySlot time ( slotDay, slots )) )
+-- daySlot time ( slotDay, slots) = map (analyseSlot time slotDay) slots
 --
---
+-- | Prueft welches Slot Schema auf die Liste angewendet werden kann.
 analyseSlot :: String -> String -> [String] -> Lecture
 -- ^ When in the time slot no lecture are given
 analyseSlot timeOfLecture dayOfLecture [] = Lecture {day="", timeSlot=TimeSlot{tstart=TimeStamp{houre="",minute=""},tend=TimeStamp{houre="",minute=""}},
@@ -96,5 +106,11 @@ locationStringToLocation (room : number) = Location{building=[room], room=number
 --
 --
 --
+printTimeTable :: TimeTable -> IO ()
+printTimeTable [] = return ()
+printTimeTable (lecture : timeTable) = do
+     print lecture
+     print "---------"
+     printTimeTable timeTable
 --
 --
