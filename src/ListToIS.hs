@@ -4,28 +4,18 @@ import IS
 import Data.Char
 --
 convertListToIS :: [(String, [(String, [[String]])])] -> TimeTable
--- convertListToIS rowList = rekLine rowList
 convertListToIS = rekLine
---convertListToIS _ = []
 --
 -- | Realisiert die Rekursion ueber die Zeilen.
 rekLine :: [(String, [(String, [[String]])])] -> TimeTable
 -- rekLine [] = []
---rekLine ( (time, slots) : lines ) = (slotsSpliter time slots) ++ (rekLine lines)
 -- rekLine ( line : lines ) = (slots line) ++ (rekLine lines)
 rekLine = concatMap slotsSpliter
 --
 -- | Realisiert die Rekursion ueber die Spalten.
---slotsSpliter :: String -> [(String, [[String]])] -> TimeTable
---slotsSpliter _ [] = []
---slotsSpliter time (slot : slots) = slotsSpliter time slots
-
 slotsSpliter :: (String, [(String, [[String]])]) -> TimeTable
 slotsSpliter ( _ , []) = []
 slotsSpliter ( time, (slot : slots) ) = (daySlot time slot) ++ (slotsSpliter (time, slots))
-
--- slots ( time, (slot : slots) ) = (daySlot time slot) ++ (slots (time, slots))
--- slots ( time, (slot : slots) ) = (daySlot time slot) 
 --
 -- | Filtert den jeweiligen Spalten Tag herraus und fuegt rekursiv die jeweiligen Lectures in eine
 -- Liste ein.
@@ -47,7 +37,6 @@ analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, iweek, 
              , location = locationStringToLocation ilocation 
              , week     = iweek
              , group    = igroup
---             , group    = 0
              , lecturer = ilecturer
              }
 -- 
