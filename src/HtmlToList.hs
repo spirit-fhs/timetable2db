@@ -1,5 +1,4 @@
 module HtmlToList ( testTableByFile
---                  , readL 
                   , tableList 
                   ) where
 --
@@ -43,9 +42,16 @@ findTime (tag : tags) =
       _ -> findTime tags
 --
 --
+filterTextSymbols :: String -> String
+filterTextSymbols [] = []
+filterTextSymbols ( '\160' : symbols ) = ' '    : (filterTextSymbols symbols)
+filterTextSymbols ( symbol : symbols ) = symbol : (filterTextSymbols symbols)
+--
+--
 tableTDText (tag : tags) =
      case tag of
-      TagText text -> ((text : (fst (tableTDText tags))), (snd (tableTDText tags)))
+--      TagText text -> ((text : (fst (tableTDText tags))), (snd (tableTDText tags)))
+      TagText text -> (((filterTextSymbols text) : (fst (tableTDText tags))), (snd (tableTDText tags)))
       TagOpen "img" (_ : (_,"bilder/monitor.gif") : _) -> (("Uebung" : (fst (tableTDText tags))), 
                                                                        (snd (tableTDText tags)))
       TagOpen "img" (_ : (_,"bilder/buch.gif") : _)    -> (("Vorlesung" : (fst (tableTDText tags))), 

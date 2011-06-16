@@ -68,8 +68,14 @@ data Lecture    = Lecture    { day      :: String   -- ^ day of a week
                              , group    :: String   -- ^ describe the group of a schedule [1..]
                              , lecturer :: String   -- ^ describe the dozent name that hold the schedule
                              }
+                | EmptyLecture 
                              deriving (Show, Read)
 --                             deriving Read
+--
+-- emptyLecture = Lecture {day="", timeSlot=TimeSlot{tstart=TimeStamp{houre="",minute=""},tend=TimeStamp{houre="",minute=""}},
+--  31                                                      vtype="", vname="", location=Location{building="",room=""}, week="", group="", lecturer=""}
+
+--
 --
 type TimeTable  = [Lecture]
 --

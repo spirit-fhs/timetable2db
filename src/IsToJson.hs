@@ -6,34 +6,34 @@ import IS
 --
 --
 testLayout :: TimeTable
-testLayout = [Lecture { day=Montag
-                      , timeSlot=TimeSlot{ tstart=TimeStamp{ houre=8
-                                                           , minute=15
+testLayout = [Lecture { day="Montag"
+                      , timeSlot=TimeSlot{ tstart=TimeStamp{ houre="8"
+                                                           , minute="15"
                                                            }
-                                         , tend  =TimeStamp{ houre=9
-                                                           , minute=45
+                                         , tend  =TimeStamp{ houre="9"
+                                                           , minute="45"
                                                            }
                                          }
-                      , vtype=Vorlesung
+                      , vtype="Vorlesung"
                       , vname="SWE V3"
                       , location=Location{building="H", room="202"}
-                      , week=Woechentlich
-                      , group=0
+                      , week="Woechentlich"
+                      , group=""
                       , lecturer="Braun"
                       }
-             ,Lecture { day=Montag
-                      , timeSlot=TimeSlot{ tstart=TimeStamp{ houre=8
-                                                           , minute=15
+             ,Lecture { day="Montag"
+                      , timeSlot=TimeSlot{ tstart=TimeStamp{ houre="8"
+                                                           , minute="15"
                                                            }
-                                         , tend  =TimeStamp{ houre=9
-                                                           , minute=45
+                                         , tend  =TimeStamp{ houre="9"
+                                                           , minute="45"
                                                            }
                                          } 
-                      , vtype=Vorlesung 
+                      , vtype="Vorlesung"
                       , vname="SWE V3"  
                       , location=Location{building="H", room="202"}
-                      , week=Woechentlich
-                      , group=0
+                      , week="Woechentlich"
+                      , group=""
                       , lecturer="Braun"
                       }      
              ]  
@@ -75,7 +75,7 @@ testJson = readJSON { "news":[{ "id":1, "title":"Heute ist Ausfall", "content":"
 -- 
 testTrans :: TimeTable -> String
 testTrans [] = "}"
-testTrans (lecture : restTimeTable) = "{\"day\" : \"" ++ (show $ day lecture)  ++ "\""
+testTrans (lecture : restTimeTable) = "{\"day\" : \"" ++ day lecture ++ "\""
                                    ++ (testTrans restTimeTable)
 --
 -- Das entfernen von escape sequenzen bereitet wahrscheinlich probleme
@@ -93,7 +93,8 @@ removeEscape (x : content)
 -- testTransCall :: String
 testTransCall = do
          content <- (testTrans testLayout)
-         isToJson "json.txt" content           
+         writeFile "json.txt" content
+--         isToJson "json.txt" content           
 --         te <- testTrans testLayout
 --         return $ read te
 --

@@ -1,1 +1,11 @@
-RepoTest
+This is a project for translating a existing Time Table Structure in a new Structure.
+
+Build it with:
+> cabal configure
+> cabal build
+or
+> cabal install
+
+A Example is in the /vorlage/s_bai6_unix.html
+
+Please think about the utf8 encoding.
