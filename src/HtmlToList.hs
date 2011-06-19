@@ -42,10 +42,16 @@ findTime (tag : tags) =
       _ -> findTime tags
 --
 --
+{-
 filterTextSymbols :: String -> String
 filterTextSymbols [] = []
 filterTextSymbols ( '\160' : symbols ) = ' '    : (filterTextSymbols symbols)
 filterTextSymbols ( symbol : symbols ) = symbol : (filterTextSymbols symbols)
+-}
+filterTextSymbols :: String -> String
+filterTextSymbols = map replace
+  where replace '\160' = ' '
+        replace x = x
 --
 --
 tableTDText (tag : tags) =
