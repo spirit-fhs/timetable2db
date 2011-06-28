@@ -45,7 +45,7 @@ data TimeSlot  = TimeSlot    { tstart  :: TimeStamp
 --
 -- | 
 --
-data VType      = Vorlesung | Uebung
+data VType      = VonsformVTyperlesung | Uebung
                   deriving (Show, Read)
 --
 data Location   = Location   { building :: String

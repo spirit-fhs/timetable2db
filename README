@@ -8,4 +8,10 @@ or
 
 A Example is in the /vorlage/s_bai6_unix.html
 
+For example use ghci.
+> cd src
+> ghci
+Prelude> :l main.hs
+*Main> :main "../vorlage/s_bai6_unix.html"
+
 Please think about the utf8 encoding.

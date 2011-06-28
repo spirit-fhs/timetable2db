@@ -37,8 +37,19 @@ module EventS where
 data DegreeClass = DegreeClass { class_id :: Int }
                deriving Show
 
-data Member      = Member { fhs_id :: String }
-               deriving Show
+--data Member      = Member { fhs_id :: String }
+--               deriving Show
+
+--newtype FhsID = FhsID String
+--newtype FhsID = FhsID {fhs_id :: String}
+--               deriving Show
+
+type FhsID = {fhs_id :: String}
+
+--data Member = Member [FhsID]
+type Member = [FhsID]
+--               deriving Show
+--data TestI = {fhs_id :: String}
 
 data Location    = Location { building :: String, room :: String }
                deriving Show
@@ -51,13 +62,17 @@ data Appointment =
                           }
                deriving Show
 
-data Event = Event { titleShort :: String
-                   , titleLong  :: String
-                   , expireDate :: String
-                   , eventType  :: String
+data Event = Event { titleShort  :: String
+                   , titleLong   :: String
+                   , expireDate  :: String
+                   , eventType   :: String
                    , degreeClass :: [DegreeClass]
-                   , member     :: [Member]
+                   , member      :: Member
                    , appointment :: [Appointment]
                    }
                deriving Show
+--
+--
+type Events = [Event]
+--
 --

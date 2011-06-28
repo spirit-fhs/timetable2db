@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 --
---module ExampleToJSON where
+module TimeTableToJSONv2 where
 ----
 ----
 import Data.Aeson
@@ -13,14 +13,22 @@ import EventS
 import TestEvents
 --
 --
+--convertISToEventS [Lecture {day="", timeSlot=TimeSlot{tstart=TimeStamp{houre="",minute=""},tend=TimeStamp{houre="",minute=""}}, vtype="", vname="", IS.location=IS.Location{IS.building="",IS.room=""}, week="", group="", lecturer=""}] 2 ["Braun","Hoeller"] ("20...","20....") "20..."
+--
+--
 instance ToJSON DegreeClass where
     toJSON (DegreeClass class_id) =
       object [ "class_id" .= class_id]
 --
 --
-instance ToJSON Member where
-    toJSON (Member fhs_id) =
+instance ToJSON FhsID where
+    toJSON (FhsID fhs_id) =
       object [ "fhs_id" .= fhs_id ]
+--
+--
+instance ToJSON Member where
+    toJSON (Member member) =
+      object member
 --
 --
 instance ToJSON Location where
