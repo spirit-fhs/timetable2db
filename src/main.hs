@@ -3,6 +3,8 @@ module Main where
 import HtmlToList
 import ListToIS
 import System.Environment
+import Data.ByteString.Lazy (putStrLn)
+import Data.Aeson.Encode
 --
 import TimeTableToJSONv2
 --
@@ -25,7 +27,7 @@ main = do
 --
 testConverterIsEv = do
 --   print lecture
-   print $ convertISToEventS [lecture] 
+   Data.ByteString.Lazy.putStrLn $ encode $ convertISToEventS [lecture] 
                              2 
                              ["Braun","Knolle","Stiefel"] 
                              ("2009-06-24 12:00:00","2009-06-24 13:30:00") 
