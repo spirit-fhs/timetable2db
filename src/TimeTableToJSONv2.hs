@@ -10,7 +10,7 @@ import Control.Applicative ( (<$>), (<*>), pure )
 import Data.ByteString.Lazy (ByteString, putStrLn, writeFile)
 --
 import EventS
-import TestEvents
+-- import TestEvents
 --
 --
 --convertISToEventS [Lecture {day="", timeSlot=TimeSlot{tstart=TimeStamp{houre="",minute=""},tend=TimeStamp{houre="",minute=""}}, vtype="", vname="", IS.location=IS.Location{IS.building="",IS.room=""}, week="", group="", lecturer=""}] 2 ["Braun","Hoeller"] ("20...","20....") "20..."
@@ -26,9 +26,9 @@ instance ToJSON FhsID where
       object [ "fhs_id" .= fhs_id ]
 --
 --
-instance ToJSON Member where
-    toJSON (Member member) =
-      object member
+--instance ToJSON Member where
+--    toJSON (Member member) =
+--      object member
 --
 --
 instance ToJSON Location where
@@ -56,7 +56,7 @@ instance ToJSON Event where
              , "appointment" .= appointment
              ]
 --
---
+{-
 test1 = do
     Data.ByteString.Lazy.putStrLn $ encode $ testLectur
 
@@ -64,5 +64,5 @@ test1 = do
 
   where 
     jsonCode = toJSON testLectur
---
+-}
 --

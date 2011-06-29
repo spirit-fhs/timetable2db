@@ -9,12 +9,8 @@ Build-type:          Simple
 Cabal-version:       >=1.2
 Description:         ..
 
-Libarary {
-
-}
-
 Executable timetable2db
   hs-source-dirs:    src
   Main-is:           main.hs
   Build-depends:     base >= 4.2 && < 5,
-                     tagsoup
+                     tagsoup, 
