@@ -13,4 +13,4 @@ Executable timetable2db
   hs-source-dirs:    src
   Main-is:           main.hs
   Build-depends:     base >= 4.2 && < 5,
-                     tagsoup, 
+                     tagsoup, bytestring, attoparsec, aeson
