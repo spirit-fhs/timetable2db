@@ -51,3 +51,6 @@ readTitleLong "GrInfv" = "Grundlagen Informationsverarbeitung"
 readTitleLong titleShort = []
 --
 --
+testConv = convertISToEventS [Lecture {day="", timeSlot=TimeSlot{tstart=TimeStamp{houre="",minute=""},tend=TimeStamp{houre="",minute=""}}, vtype="", vname="", IS.location=IS.Location{IS.building="",IS.room=""}, week="", group="", lecturer=""}] 2 ["Braun","Hoeller"] ("20...","20....") "20..."
+--
+--

@@ -41,10 +41,10 @@ data DegreeClass = DegreeClass { class_id :: Int }
 --               deriving Show
 
 --newtype FhsID = FhsID String
---newtype FhsID = FhsID {fhs_id :: String}
---               deriving Show
+newtype FhsID = FhsID {fhs_id :: String}
+               deriving Show
 
-type FhsID = {fhs_id :: String}
+----type FhsID = {fhs_id :: String}
 
 --data Member = Member [FhsID]
 type Member = [FhsID]
