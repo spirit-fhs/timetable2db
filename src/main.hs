@@ -1,15 +1,16 @@
 module Main where
 --
 import HtmlToList
-import ListToIS
+import Transformer.ListToIS
+--
 import System.Environment
 import Data.ByteString.Lazy (putStrLn)
 import Data.Aeson.Encode
 --
-import TimeTableToJSONv2
+import Transformer.TimeTableToJSONv2
 --
-import IS
-import IsToEvent
+import Transformer.IS
+import Transformer.IsToEvent
 --
 -- filePath = "../vorlage/s_bamm6.html"
 --
@@ -33,6 +34,6 @@ testConverterIsEv = do
                              ("2009-06-24 12:00:00","2009-06-24 13:30:00") 
                              "2009-06-24 12:00:00"
   where 
-   lecture = Lecture {day="", timeSlot=TimeSlot{tstart=TimeStamp{houre="",minute=""},tend=TimeStamp{houre="",minute=""}}, vtype="", vname="", location=Location{building    ="",room=""}, week="", group="", lecturer=""}
+   lecture = Lecture {day="Montag", timeSlot=TimeSlot{tstart=TimeStamp{houre="12",minute="00"},tend=TimeStamp{houre="13",minute="30"}}, vtype="Vorlesung", vname="GrInfv", location=Location{building="F",room="111"}, week="w", group="", lecturer="braun"}
 --
 --
