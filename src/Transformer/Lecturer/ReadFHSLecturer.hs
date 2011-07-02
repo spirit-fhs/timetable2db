@@ -109,15 +109,20 @@ checkChunk elem =
 --    Data.ByteString.Lazy.putStrLn $ encode $ testLectur
 --
 --
-readJSON = do
-     jsonDaten <- Data.ByteString.Lazy.readFile "../daten/mongodb_bkp_fhsdozent.json"
-     print "test"
+readJSON filePath = do
+     jsonDaten <- Data.ByteString.Lazy.readFile filePath
+--     print "test"
 --     print $ map parseingJson (map checkChunk $ Data.ByteString.Lazy.UTF8.lines jsonDaten)
-     return $ map maybeJsonToFHSLecturerS $ map parseingJson (map checkChunk $ Data.ByteString.Lazy.UTF8.lines jsonDaten)
+--     print $ name' $ dozent $ head $ map maybeJsonToFHSLecturerS $ map parseingJson (map checkChunk $ Data.ByteString.Lazy.UTF8.lines jsonDaten)
+--
+     return $ M.fromList $ filterLecturere $ map maybeJsonToFHSLecturerS $ map parseingJson (map checkChunk $ Data.ByteString.Lazy.UTF8.lines jsonDaten)
+--     return $ map maybeJsonToFHSLecturerS $ map parseingJson (map checkChunk $ Data.ByteString.Lazy.UTF8.lines jsonDaten)
 --
 --
--- filterLecturere = 
-     
-     
+filterLecturere :: [FHSLecturerS] -> [(String,[String])]
+filterLecturere [] = []
+filterLecturere ( lecturer : lecturers ) = 
+--     ((fhsId lecturer), [(name' $ dozent lecturer)] ) : (filterLecturere lecturers)
+     ((name' $ dozent lecturer), [(fhsId lecturer)] ) : (filterLecturere lecturers)
 --
 --

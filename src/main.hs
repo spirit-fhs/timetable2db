@@ -15,6 +15,8 @@ import Transformer.IsToEvent
 --
 import Transformer.Lecturer.MultiLecturer
 --
+import Transformer.Lecturer.ReadFHSLecturer
+--
 -- filePath = "../vorlage/s_bamm6.html"
 --
 -- iconv --from-code=ISO-8859-1 --to-code=UTF-8 s_bamm6.html > s_bamm6_unix.html
@@ -28,10 +30,17 @@ main = do
 --   print $ convertListToIS $ tableList daten
    printTimeTable $ convertListToIS $ tableList daten
 --
+--
 testReadMultiLecturer = do
 --   print "hallo"
    transDaten <- readMultiLecturer "test.txt"
    print $ M.lookup "Mach" transDaten
+--
+--
+testReadFHSLecturers = do
+   fhsLecturers <- readJSON "../daten/mongodb_bkp_fhsdozent.json"
+   print $ M.lookup "Recknagel" fhsLecturers
+--
 --
 testConverterIsEv = do
 --   print lecture
