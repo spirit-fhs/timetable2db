@@ -1,6 +1,7 @@
 module Transformer.IsReadWrite where
 --
-import qualified Transformer.IS as IS
+--import qualified Transformer.IS as IS
+import Transformer.IS
 --
 {-
 testLayout :: TimeTable

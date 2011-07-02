@@ -6,11 +6,14 @@ import Transformer.ListToIS
 import System.Environment
 import Data.ByteString.Lazy (putStrLn)
 import Data.Aeson.Encode
+import qualified Data.Map as M
 --
 import Transformer.TimeTableToJSONv2
 --
 import Transformer.IS
 import Transformer.IsToEvent
+--
+import Transformer.Lecturer.MultiLecturer
 --
 -- filePath = "../vorlage/s_bamm6.html"
 --
@@ -25,6 +28,10 @@ main = do
 --   print $ convertListToIS $ tableList daten
    printTimeTable $ convertListToIS $ tableList daten
 --
+testReadMultiLecturer = do
+--   print "hallo"
+   transDaten <- readMultiLecturer "test.txt"
+   print $ M.lookup "Mach" transDaten
 --
 testConverterIsEv = do
 --   print lecture
