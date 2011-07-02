@@ -80,16 +80,13 @@ instance FromJSON FHSLecturerS where
         v .: "dozent"
     parseJSON _ = mzero
 --
---parseingJson :: ByteString -> Maybe FHSLecturerS
---parseingJson :: ByteString -> Maybe Response
+-- ----------------------------------------
+--
 parseingJson s =
---   let bs = BS.pack s
---   let bs = pack s
     case parse json s of
       (Done rest r) -> parseMaybe parseJSON r :: Maybe FHSLecturerS
---      (Done rest r) -> parseMaybe parseJSON r :: Maybe Response
 --
---
+-- | This function checks that the JSON read are correct.
 maybeJsonToFHSLecturerS content =
    case content of
     (Just a) -> a
@@ -104,19 +101,11 @@ checkChunk elem =
    case elem of
     Chunk e Empty -> e
 --
---checkChunk x e y = e
---test1 = do
---    Data.ByteString.Lazy.putStrLn $ encode $ testLectur
 --
 -- | Reads a json file as input an transform it into a Map
 readJSON filePath = do
      jsonDaten <- Data.ByteString.Lazy.readFile filePath
---     print "test"
---     print $ map parseingJson (map checkChunk $ Data.ByteString.Lazy.UTF8.lines jsonDaten)
---     print $ name' $ dozent $ head $ map maybeJsonToFHSLecturerS $ map parseingJson (map checkChunk $ Data.ByteString.Lazy.UTF8.lines jsonDaten)
---
      return $ M.fromList $ filterLecturere $ map maybeJsonToFHSLecturerS $ map parseingJson (map checkChunk $ Data.ByteString.Lazy.UTF8.lines jsonDaten)
---     return $ map maybeJsonToFHSLecturerS $ map parseingJson (map checkChunk $ Data.ByteString.Lazy.UTF8.lines jsonDaten)
 --
 -- | Translate a list of FHSLecturerS into a list of tupls with a key value.
 filterLecturere :: [FHSLecturerS] -> [(String,[String])]
