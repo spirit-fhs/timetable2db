@@ -108,7 +108,7 @@ checkChunk elem =
 --test1 = do
 --    Data.ByteString.Lazy.putStrLn $ encode $ testLectur
 --
---
+-- | Reads a json file as input an transform it into a Map
 readJSON filePath = do
      jsonDaten <- Data.ByteString.Lazy.readFile filePath
 --     print "test"
@@ -118,7 +118,7 @@ readJSON filePath = do
      return $ M.fromList $ filterLecturere $ map maybeJsonToFHSLecturerS $ map parseingJson (map checkChunk $ Data.ByteString.Lazy.UTF8.lines jsonDaten)
 --     return $ map maybeJsonToFHSLecturerS $ map parseingJson (map checkChunk $ Data.ByteString.Lazy.UTF8.lines jsonDaten)
 --
---
+-- | Translate a list of FHSLecturerS into a list of tupls with a key value.
 filterLecturere :: [FHSLecturerS] -> [(String,[String])]
 filterLecturere [] = []
 filterLecturere ( lecturer : lecturers ) = 

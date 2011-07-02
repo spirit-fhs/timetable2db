@@ -30,13 +30,16 @@ main = do
 --   print $ convertListToIS $ tableList daten
    printTimeTable $ convertListToIS $ tableList daten
 --
---
+-- | The readMultiLecturer function is for Lecturer combinations.
+-- For example ChanHoel is a combination about Chantelau and Höller
 testReadMultiLecturer = do
 --   print "hallo"
    transDaten <- readMultiLecturer "test.txt"
    print $ M.lookup "Mach" transDaten
 --
---
+-- | This is a example for using the readJSON function.
+-- The existens reason is that the JSON file have to many informations.
+-- The readJSON function minimize the informations to a MAP.
 testReadFHSLecturers = do
    fhsLecturers <- readJSON "../daten/mongodb_bkp_fhsdozent.json"
    print $ M.lookup "Recknagel" fhsLecturers
