@@ -4,6 +4,7 @@ module Transformer.IsToEvent where
 import qualified Transformer.IS as IS
 import Transformer.Event.EventS
 --
+import qualified Data.Map as M
 --
 --import Data.Aeson
 --import Data.Aeson.Types ( parseMaybe )
@@ -17,19 +18,20 @@ import Transformer.Event.EventS
 -- TODO: es muss die class_id noch abgefragt werden, damit die daten richtig eingefuegt werden koennen
 --
 --
-convertISToEventS :: IS.TimeTable -> Int -> [String] -> (String,String) -> String -> Events
+--convertISToEventS :: IS.TimeTable -> Int -> [String] -> (String,String) -> String -> Events
 convertISToEventS [] _ _ _ _ = []
-convertISToEventS (lecture : timeTable) classID fhsIDs eventStamp expire = 
+convertISToEventS (lecture : timeTable) classID fhsIDMap eventStamp expire = 
       (Event { titleShort  = IS.vname lecture
              , titleLong   = readTitleLong $ IS.vname lecture
              , expireDate  = expire
              , eventType   = transformVType $ IS.vtype lecture
              , degreeClass = [DegreeClass {class_id=classID}]
 --             , member      = Member $ generateMember fhsIDs
-             , member      = generateMember fhsIDs
+--             , member      = generateMember fhsIDs
+             , member      = matchLecturer (IS.lecturer lecture) fhsIDMap 
              , appointment = generateAppointment eventStamp (IS.location lecture) (IS.week lecture)
              }
-      ) : (convertISToEventS timeTable classID fhsIDs eventStamp expire)
+      ) : (convertISToEventS timeTable classID fhsIDMap eventStamp expire)
 --
 --
 transformVType :: String -> String
@@ -41,6 +43,14 @@ transformVType ""          = "Nothing"
 -- ein generator um alle appointments zu generieren
 generateAppointment :: (String,String) -> IS.Location -> String -> [Appointment]
 generateAppointment (startEvent,endEvent) location week = []
+--
+--
+--matchLecturer :: String -> M.Map -> [String]
+matchLecturer lecturer fhsMap = 
+       case M.lookup lecturer fhsMap of
+         Just lecturerList -> generateMember lecturerList 
+--         _                 -> error "Lecturer: " ++ lecturer ++ " not found in Map"
+         _                 -> []
 --
 --
 --generateMember :: [String] -> [Member]

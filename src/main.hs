@@ -25,10 +25,26 @@ main = do
    (filePath : args) <- getArgs
 --   testTableByFile filePath
    daten <- readFile filePath
-   print $ tableList daten
-   print "----------------------"
+--   print $ tableList daten
+--   print "----------------------"
+--
+-- ^ Read Lecturer in Maps and apend it to one
+   transDaten <- readMultiLecturer "test.txt"
+   fhsLecturers <- readJSON "../daten/mongodb_bkp_fhsdozent.json"
+--
+   print $ M.lookup "Mach" $ M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers)
+--
 --   print $ convertListToIS $ tableList daten
-   printTimeTable $ convertListToIS $ tableList daten
+--
+-- eigentlicher aufruf um die tabellen daten zu verarbeiten
+--   printTimeTable $ convertListToIS $ tableList daten
+--
+   Data.ByteString.Lazy.putStrLn $ encode $ 
+           convertISToEventS ( convertListToIS $ tableList daten ) 
+                             2 
+                             (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
+                             ("2009-06-24 12:00:00","2009-06-24 13:30:00")
+                             "2009-06-24 12:00:00"
 --
 -- | The readMultiLecturer function is for Lecturer combinations.
 -- For example ChanHoel is a combination about Chantelau and Höller
@@ -44,7 +60,7 @@ testReadFHSLecturers = do
    fhsLecturers <- readJSON "../daten/mongodb_bkp_fhsdozent.json"
    print $ M.lookup "Recknagel" fhsLecturers
 --
---
+{-
 testConverterIsEv = do
 --   print lecture
    Data.ByteString.Lazy.putStrLn $ encode $ convertISToEventS [lecture] 
@@ -54,5 +70,5 @@ testConverterIsEv = do
                              "2009-06-24 12:00:00"
   where 
    lecture = Lecture {day="Montag", timeSlot=TimeSlot{tstart=TimeStamp{houre="12",minute="00"},tend=TimeStamp{houre="13",minute="30"}}, vtype="Vorlesung", vname="GrInfv", location=Location{building="F",room="111"}, week="w", group="", lecturer="braun"}
---
+-}
 --
