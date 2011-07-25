@@ -1,5 +1,11 @@
 [ ("Bagchi",["bagchi"])
 , ("Wachsmann", ["wachsmann"])
 , ("Mach", ["mach"])
-, ("BoeChaHet", ["Böse", "Chantelau", "Hettler"])
+, ("BoeChaHet", ["boese", "chantelau", "hettler"])
+, ("BeyerNadob", ["beyer", "nadobny"])
+, ("Beyer_", ["beyer"])
+, ("Knolle_", ["knolle"])
+, ("Golz", ["golz"])
+, ("H\65533ller", ["hoeller"])
+, ("B\65533se", ["boese"])
 ]

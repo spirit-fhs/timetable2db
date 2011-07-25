@@ -17,24 +17,60 @@ import Transformer.Lecturer.MultiLecturer
 --
 import Transformer.Lecturer.ReadFHSLecturer
 --
+-- Web abfrage Module
+import Network.HTTP.Enumerator
+import Network.HTTP.Types
+import qualified Data.ByteString.Lazy.UTF8 as BSLU
+import Network.Socket
+--
+--
 -- filePath = "../vorlage/s_bamm6.html"
 --
 -- iconv --from-code=ISO-8859-1 --to-code=UTF-8 s_bamm6.html > s_bamm6_unix.html
 --
+requestHTML addr = withSocketsDo $ do
+    req0 <- parseUrl addr
+    let req = req0 { method = methodGet }
+    res <- withManager $ httpLbs req
+    return $ BSLU.toString $ responseBody res
+--
+--
+debug :: Bool
+debug = True
+--debug = False
+--
+-- :main "http://sund.de/steffen/plan/s_bai1.html"  -> geht
+-- :main "http://sund.de/steffen/plan/s_bai2.html"  -> geht
+--
+-- :main "http://sund.de/steffen/plan/s_bai6.html"  -> geht
+-- :main "http://sund.de/steffen/plan/s_bamm6.html" -> geht
+--
+--
+--
 main = do
    (filePath : args) <- getArgs
 --   testTableByFile filePath
-   daten <- readFile filePath
---   print $ tableList daten
+--   daten <- readFile filePath
+   daten <- requestHTML filePath
+   if debug == True 
+    then
+     print $ tableList daten
+    else
+     print ""
 --   print "----------------------"
 --
 -- ^ Read Lecturer in Maps and apend it to one
    transDaten <- readMultiLecturer "test.txt"
    fhsLecturers <- readJSON "../daten/mongodb_bkp_fhsdozent.json"
 --
-   print $ M.lookup "Mach" $ M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers)
+   if debug == True
+    then
+     print $ convertListToIS $ tableList daten
+---     print $ M.lookup "Mach" $ M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers)
+    else
+     print ""
 --
---   print $ convertListToIS $ tableList daten
+---   print $ convertListToIS $ tableList daten
 --
 -- eigentlicher aufruf um die tabellen daten zu verarbeiten
 --   printTimeTable $ convertListToIS $ tableList daten
