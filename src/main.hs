@@ -60,7 +60,7 @@ main = do
 --   print "----------------------"
 --
 -- ^ Read Lecturer in Maps and apend it to one
-   transDaten <- readMultiLecturer "test.txt"
+   transDaten <- readMultiLecturer "MultiLecturer.txt"
    fhsLecturers <- readJSON "../daten/mongodb_bkp_fhsdozent.json"
 --
    if debug == True
@@ -86,7 +86,7 @@ main = do
 -- For example ChanHoel is a combination about Chantelau and Höller
 testReadMultiLecturer = do
 --   print "hallo"
-   transDaten <- readMultiLecturer "test.txt"
+   transDaten <- readMultiLecturer "MultiLecturer.txt"
    print $ M.lookup "Mach" transDaten
 --
 -- | This is a example for using the readJSON function.
