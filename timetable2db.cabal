@@ -18,3 +18,4 @@ Executable timetable2db
                    , http-types -any, http-enumerator -any
                    , network -any, utf8-string -any
                    , containers -any
+                   , tls -any, http-enumerator -any
