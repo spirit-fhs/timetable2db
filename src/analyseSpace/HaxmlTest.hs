@@ -1,4 +1,4 @@
-{-# LANGUAGE Arrows #-}
+ {-# LANGUAGE OverloadedStrings #-}
 module HaxmlTest where
 --
 import Network.Socket
@@ -6,7 +6,7 @@ import Network.HTTP.Enumerator
 import Network.HTTP.Types
 import qualified Data.ByteString.Lazy.UTF8 as BSLU
 --
-import Text.XML.HaXml.Html.Parse
+import qualified Text.XML.HaXml.Html.Parse as XML
 --
 --
 requestHTML addr = withSocketsDo $ do
@@ -18,7 +18,8 @@ requestHTML addr = withSocketsDo $ do
 --
 testHaxml = do
   daten <- requestHTML "http://sund.de/steffen/plan/s_bai6.html"
-  htmlParse "s_bai6.html" daten
---
+  XML.htmlParse "test" daten
+--  test <- XML.htmlParse "s_bai6.html" "test"
+--  print $ XML.htmlParse "s_bai6.html" "test"
 --
 --
