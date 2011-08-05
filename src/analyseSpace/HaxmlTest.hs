@@ -1,3 +1,4 @@
+{-# LANGUAGE Arrows #-}
 module HaxmlTest where
 --
 import Network.Socket
