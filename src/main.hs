@@ -17,6 +17,11 @@ import Transformer.Lecturer.MultiLecturer
 --
 import Transformer.Lecturer.ReadFHSLecturer
 --
+--
+import RestService
+import qualified Data.ByteString.Lazy as L
+--
+--
 -- Web abfrage Module
 import Network.HTTP.Enumerator
 import Network.HTTP.Types
@@ -95,6 +100,14 @@ testReadMultiLecturer = do
 testReadFHSLecturers = do
    fhsLecturers <- readJSON "../daten/mongodb_bkp_fhsdozent.json"
    print $ M.lookup "Recknagel" fhsLecturers
+--
+--
+testReadRestService = do
+   print "Read Rest Service"
+   events <- getEventsFromRest "https://212.201.64.226:8443/fhs-spirit/event"   
+   L.putStrLn events
+
+--
 --
 {-
 testConverterIsEv = do
