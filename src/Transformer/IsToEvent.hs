@@ -34,6 +34,41 @@ convertISToEventS (lecture : timeTable) classID fhsIDMap eventStamp expire =
       ) : (convertISToEventS timeTable classID fhsIDMap eventStamp expire)
 --
 --
+convertISToEventS' [] _ _ _ _ = []
+convertISToEventS' (lecture : timeTable) classID fhsIDMap eventStamp expire =
+      (Event { titleShort  = IS.vname lecture
+             , titleLong   = readTitleLong $ IS.vname lecture
+             , expireDate  = expire
+             , eventType   = transformVType $ IS.vtype lecture
+             , degreeClass = [DegreeClass {class_id=classID}]
+             , member      = matchLecturer (IS.lecturer lecture) fhsIDMap
+             , appointment = generateAppointment' ( (IS.day lecture)
+                                                  , IS.timeSlotToString (IS.timeSlot lecture)
+                                                  ) 
+                                                  (IS.location lecture) 
+                                                  (IS.week lecture)
+             }
+       ) : (convertISToEventS' timeTable classID fhsIDMap eventStamp expire)
+--
+--
+
+--
+--
+generateAppointment' :: (String,String) -> IS.Location -> String -> [Appointment]
+--generateAppointment' (startEvent,endEvent) location week = []
+--
+generateAppointment' (startEvent,endEvent) location week = 
+         [Appointment { startAppointment=startEvent
+                      , endAppointment=endEvent
+                      , status=week
+                      , location=[Location { building=(IS.building location)
+                                           , room=(IS.room location)
+                                           }
+                                 ] 
+                      }
+         ]
+--
+--
 transformVType :: String -> String
 transformVType "Vorlesung" = "Lecture"
 transformVType "Uebung"    = ""

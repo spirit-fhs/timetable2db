@@ -4,7 +4,7 @@ import HtmlToList
 import Transformer.ListToIS
 --
 import System.Environment
-import Data.ByteString.Lazy (putStrLn)
+import Data.ByteString.Lazy (putStrLn, writeFile)
 import Data.Aeson.Encode
 import qualified Data.Map as M
 --
@@ -44,6 +44,9 @@ debug :: Bool
 debug = True
 --debug = False
 --
+outputFile :: Bool
+outputFile = True
+--
 -- :main "http://sund.de/steffen/plan/s_bai1.html"  -> geht
 -- :main "http://sund.de/steffen/plan/s_bai2.html"  -> geht
 --
@@ -80,12 +83,31 @@ main = do
 -- eigentlicher aufruf um die tabellen daten zu verarbeiten
 --   printTimeTable $ convertListToIS $ tableList daten
 --
-   Data.ByteString.Lazy.putStrLn $ encode $ 
-           convertISToEventS ( convertListToIS $ tableList daten ) 
-                             2 
-                             (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
-                             ("2009-06-24 12:00:00","2009-06-24 13:30:00")
-                             "2009-06-24 12:00:00"
+   if outputFile == True
+    then
+     Data.ByteString.Lazy.writeFile "event.json" $ encode $
+             convertISToEventS ( convertListToIS $ tableList daten )
+                               2
+                               (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
+                               ("2009-06-24 12:00:00","2009-06-24 13:30:00")
+                               "2009-06-24 12:00:00"
+   else
+     Data.ByteString.Lazy.putStrLn $ encode $ 
+             convertISToEventS ( convertListToIS $ tableList daten ) 
+                               2 
+                               (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
+                               ("2009-06-24 12:00:00","2009-06-24 13:30:00")
+                               "2009-06-24 12:00:00"
+--
+--
+   Data.ByteString.Lazy.writeFile "event.json" $ encode $
+            convertISToEventS' ( convertListToIS $ tableList daten )
+                               2
+                               (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
+                               ("2009-06-24 12:00:00","2009-06-24 13:30:00")
+                               "2009-06-24 12:00:00"
+
+--
 --
 -- | The readMultiLecturer function is for Lecturer combinations.
 -- For example ChanHoel is a combination about Chantelau and Höller
