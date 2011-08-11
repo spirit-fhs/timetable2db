@@ -157,9 +157,9 @@ printHead = do
 --
 --
 printHtml = do 
-        daten <- readFile "testHtml2.html"
+--        daten <- readFile "testHtml2.html"
 --        daten <- readL "testHtml2.html"
---        daten <- readL "s_bai6_unix.html"
+        daten <- readFile "../vorlage/s_bai6_unix.html"
         print $ parseTags daten
 --
 --
