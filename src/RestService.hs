@@ -21,9 +21,14 @@ getEventsFromRest url = do
 --  L.putStrLn $ responseBody res
   return $ responseBody res
 --
+--
+
+--
+--
+{-
 main = do
   events <- getEventsFromRest "https://212.201.64.226:8443/fhs-spirit/event" 
   L.putStrLn events
   L.writeFile "events.json" events 
---
+-}
 --
