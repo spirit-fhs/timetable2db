@@ -68,8 +68,8 @@ main = do
 --   print "----------------------"
 --
 -- ^ Read Lecturer in Maps and apend it to one
-   transDaten <- readMultiLecturer "MultiLecturer.txt"
-   fhsLecturers <- readJSON "../daten/mongodb_bkp_fhsdozent.json"
+   transDaten   <- readMultiLecturer "MultiLecturer.txt"
+   fhsLecturers <- readJSON          "../daten/mongodb_bkp_fhsdozent.json"
 --
    if debug == True
     then
@@ -78,11 +78,7 @@ main = do
     else
      print ""
 --
----   print $ convertListToIS $ tableList daten
---
--- eigentlicher aufruf um die tabellen daten zu verarbeiten
---   printTimeTable $ convertListToIS $ tableList daten
---
+-- When the outputFile are True then the timetable JSON data are write to file.
    if outputFile == True
     then
      Data.ByteString.Lazy.writeFile "event.json" $ encode $
@@ -99,20 +95,21 @@ main = do
                                ("2009-06-24 12:00:00","2009-06-24 13:30:00")
                                "2009-06-24 12:00:00"
 --
---
+-- This write the timetable in a special format in a file for a project from Marcus.
+{-
    Data.ByteString.Lazy.writeFile "event.json" $ encode $
             convertISToEventS' ( convertListToIS $ tableList daten )
                                2
                                (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
                                ("2009-06-24 12:00:00","2009-06-24 13:30:00")
                                "2009-06-24 12:00:00"
-
+-}
 --
 --
 -- | The readMultiLecturer function is for Lecturer combinations.
--- For example ChanHoel is a combination about Chantelau and Höller
+-- For example ChanHoel is a combination about Chantelau and Höller.
+-- For a example Map.lookup.
 testReadMultiLecturer = do
---   print "hallo"
    transDaten <- readMultiLecturer "MultiLecturer.txt"
    print $ M.lookup "Mach" transDaten
 --

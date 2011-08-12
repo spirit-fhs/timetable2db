@@ -123,19 +123,6 @@ searchTR days (tag : tags) =
      rekursion = searchTR days restPars
 --
 --
---table :: [String] -> [Tag String] -> ([(String, [(String, [[String]])])], [Tag String])
---table days atag@(tag : tags) = 
---     case tag of
---      TagOpen "TABLE" content -> searchTR days tags
---      _ -> table days tags
---
---
---
--- printSlots :: [(String, [(String, [[String]])])] -> String
---printSlots [] = return ()
---printSlots ( (day : days) : slots ) = do
---       print day
---       printSlots (days, slots)
 --
 tableList :: String -> [(String, [(String, [[String]])])]
 tableList daten = fst $ searchTR (tail (fst $ tableHead $ parseTags daten)) (snd (tableHead (parseTags daten)))
