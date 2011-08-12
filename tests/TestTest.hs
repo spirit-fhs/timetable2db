@@ -16,3 +16,9 @@ qsort (x:xs) = qsort lhs ++ [x] ++ qsort rhs
 prop_idempotent xs = qsort (qsort xs) == qsort xs
 --
 --
+prop_PlusAssociative :: Integer -> Integer -> Integer -> Bool
+prop_PlusAssociative x y z = 
+      (x + y) + z == x + (y + z)
+
+--
+--
