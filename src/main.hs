@@ -13,8 +13,8 @@ import Transformer.TimeTableToJSONv2
 import Transformer.IS
 import Transformer.IsToEvent
 --
+-- Libs for working with lecturer database
 import Transformer.Lecturer.MultiLecturer
---
 import Transformer.Lecturer.ReadFHSLecturer
 --
 --
@@ -22,12 +22,13 @@ import RestService
 import qualified Data.ByteString.Lazy as L
 --
 --
--- Web abfrage Module
+-- Libs for web request
+-- ===============================================
 import Network.HTTP.Enumerator
 import Network.HTTP.Types
 import qualified Data.ByteString.Lazy.UTF8 as BSLU
 import Network.Socket
---
+-- ===============================================
 --
 -- filePath = "../vorlage/s_bamm6.html"
 --
@@ -39,21 +40,11 @@ requestHTML addr = withSocketsDo $ do
     res <- withManager $ httpLbs req
     return $ BSLU.toString $ responseBody res
 --
---
-debug :: Bool
-debug = True
---debug = False
---
-outputFile :: Bool
-outputFile = True
---
 -- :main "http://sund.de/steffen/plan/s_bai1.html"  -> geht
 -- :main "http://sund.de/steffen/plan/s_bai2.html"  -> geht
 --
 -- :main "http://sund.de/steffen/plan/s_bai6.html"  -> geht
 -- :main "http://sund.de/steffen/plan/s_bamm6.html" -> geht
---
---
 --
 main = do
    (filePath : args) <- getArgs
@@ -67,16 +58,31 @@ main = do
      print ""
 --   print "----------------------"
 --
--- ^ Read Lecturer in Maps and apend it to one
-   transDaten   <- readMultiLecturer "MultiLecturer.txt"
-   fhsLecturers <- readJSON          "../daten/mongodb_bkp_fhsdozent.json"
+-- @TODO: Read this informations from a config file.
+   debug :: Bool
+   debug = True
+--   debug = False
 --
+   outputFile :: Bool
+   outputFile = True
+--
+   multiLecturerFile = "MultiLecturer.txt"
+   fhsDozentJSON     = "../daten/mongodb_bkp_fhsdozent.json"
+--
+--
+--
+-- ^ Read Lecturer in Maps and merge it to one
+   transDaten   <- readMultiLecturer multiLecturerFile
+   fhsLecturers <- readJSON          fhsDozentJSON
+--
+-- Check debuging
+-- ===============================================
    if debug == True
     then
      print $ convertListToIS $ tableList daten
----     print $ M.lookup "Mach" $ M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers)
     else
      print ""
+-- ===============================================
 --
 -- When the outputFile are True then the timetable JSON data are write to file.
    if outputFile == True
@@ -110,14 +116,14 @@ main = do
 -- For example ChanHoel is a combination about Chantelau and Höller.
 -- For a example Map.lookup.
 testReadMultiLecturer = do
-   transDaten <- readMultiLecturer "MultiLecturer.txt"
+   transDaten <- readMultiLecturer multiLecturerFile
    print $ M.lookup "Mach" transDaten
 --
 -- | This is a example for using the readJSON function.
 -- The existens reason is that the JSON file have to many informations.
 -- The readJSON function minimize the informations to a MAP.
 testReadFHSLecturers = do
-   fhsLecturers <- readJSON "../daten/mongodb_bkp_fhsdozent.json"
+   fhsLecturers <- readJSON fhsDozentJSON
    print $ M.lookup "Recknagel" fhsLecturers
 --
 --
