@@ -78,8 +78,10 @@ data Lecture    = Lecture    { day      :: String   -- ^ day of a week
 --
 --
 type TimeTable  = [Lecture]
---
---
+{-
+instance Show TimeSlot where
+  show = timeSlotToString
+-}
 timeSlotToString :: TimeSlot -> String
 timeSlotToString timeSlot = (houre (tstart timeSlot)) ++ "." ++ (minute (tstart timeSlot))
                 ++ " - " ++ (houre (tend timeSlot)) ++ "." ++ (minute (tend timeSlot))
