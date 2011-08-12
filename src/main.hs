@@ -87,7 +87,7 @@ main = do
                                (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
                                ("2009-06-24 12:00:00","2009-06-24 13:30:00")
                                "2009-06-24 12:00:00"
-   else
+    else
      Data.ByteString.Lazy.putStrLn $ encode $ 
              convertISToEventS ( convertListToIS $ tableList daten ) 
                                2 
