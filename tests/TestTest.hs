@@ -1,11 +1,32 @@
 module TestTest where
 --
--- cabal install QuickCheck
+-- cabal install QuickCheck test-framework-hunit
 --
+--import Test.QuickCheck
+--import Data.List
+import Control.Monad ( liftM )
+import Data.List ( intersperse )
 import Test.QuickCheck
-import Data.List
+--
+import Test.Framework (defaultMain, testGroup)
+import Test.Framework.Providers.HUnit
+import Test.HUnit
+--
+main :: IO ()
+main = defaultMain tests
+--
+tests = [
+         testGroup "HUnit Tests - One copy" 
+          [ testCase "All titles are rentable." test_rentable
+          ]
+        ]
 --
 --
+test_rentable = assertBool "moop" ( "Hallo" == "Hallo" )
+--
+--
+--
+{-
 qsort :: Ord a => [a] -> [a]
 qsort []     = []
 qsort (x:xs) = qsort lhs ++ [x] ++ qsort rhs
@@ -15,10 +36,18 @@ qsort (x:xs) = qsort lhs ++ [x] ++ qsort rhs
 --
 prop_idempotent xs = qsort (qsort xs) == qsort xs
 --
+quadraFunc :: Integer -> Integer
+quadraFunc x = x * x
+--
+prop_quadraFunc :: Bool
+prop_quadraFunc = quadraFunc 2 == 4
+--
+--
+--
 --
 prop_PlusAssociative :: Integer -> Integer -> Integer -> Bool
 prop_PlusAssociative x y z = 
       (x + y) + z == x + (y + z)
 
---
+-}
 --

@@ -19,3 +19,15 @@ Executable timetable2db
                    , network -any, utf8-string -any
                    , containers -any
                    , tls -any, http-enumerator -any
+
+test-suite timetable2db-tests
+  type: exitcode-stdio-1.0
+  hs-source-dirs: src tests
+  Main-is: TestSuite.hs
+  Build-depends: base >= 4.2 && < 5,
+                     containers, QuickCheck >= 2, HUnit,
+                     test-framework -any,
+--                     test-framework-quickcheck2 -any,
+                     test-framework-hunit -any
+  ghc-options: -O2 -Wall -fhpc -fwarn-tabs -funbox-strict-fields -threaded
+               -fno-warn-unused-do-bind

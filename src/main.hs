@@ -11,7 +11,7 @@ import qualified Data.Map as M
 --
 import Transformer.TimeTableToJSONv2
 --
--- import Transformer.IS
+import Transformer.IS
 import Transformer.IsToEvent
 --
 -- Libs for working with lecturer database
@@ -89,4 +89,24 @@ main = do
                                "2009-06-24 12:00:00"
 -}
 --
+test_rentable =  
+                           (convertISToEventS [testLecture] 
+                                                2 
+                                                ( M.fromList [("Braun",["braun"])] )    
+                                                ("2009-06-24 12:00:00","2009-06-24 13:30:00")
+                                                "2009-06-24 12:00:00"
+                           )
+  where
+   testLecture = Lecture { day="Montag"
+                         , timeSlot=TimeSlot{ tstart=TimeStamp{houre="08",minute="15"}
+                                            , tend  =TimeStamp{houre="09",minute="45"}
+                                            }
+                         , vtype="Vorlesung"
+                         , vname="SWE Prog V3"
+                         , location=Location{building="F",room="004"}
+                         , week="Woechentlich"
+                         , group=""
+                         , lecturer="Braun"
+                         }
+
 --

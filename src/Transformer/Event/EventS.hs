@@ -35,14 +35,14 @@ module Transformer.Event.EventS where
 }
 -}
 data DegreeClass = DegreeClass { class_id :: Int }
-               deriving Show
+               deriving Show 
 
 --data Member      = Member { fhs_id :: String }
 --               deriving Show
 
 --newtype FhsID = FhsID String
 newtype FhsID = FhsID {fhs_id :: String}
-               deriving Show
+               deriving Show 
 
 ----type FhsID = {fhs_id :: String}
 
@@ -52,7 +52,7 @@ type Member = [FhsID]
 --data TestI = {fhs_id :: String}
 
 data Location    = Location { building :: String, room :: String }
-               deriving Show
+               deriving Show 
 
 data Appointment = 
               Appointment { startAppointment :: String
@@ -60,7 +60,7 @@ data Appointment =
                           , status           :: String
                           , location         :: [Location]
                           }
-               deriving Show
+               deriving Show 
 
 data Event = Event { titleShort  :: String
                    , titleLong   :: String
@@ -70,7 +70,7 @@ data Event = Event { titleShort  :: String
                    , member      :: Member
                    , appointment :: [Appointment]
                    }
-               deriving Show
+               deriving Show 
 --
 --
 type Events = [Event]
