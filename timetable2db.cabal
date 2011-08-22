@@ -22,7 +22,7 @@ Executable timetable2db
 
 test-suite timetable2db-tests
   type: exitcode-stdio-1.0
-  hs-source-dirs: src tests
+  hs-source-dirs: src 
   Main-is: TestSuite.hs
   Build-depends: base >= 4.2 && < 5,
                      containers, QuickCheck >= 2, HUnit,
