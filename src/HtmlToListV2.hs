@@ -5,8 +5,7 @@ import Text.HTML.TagSoup.Tree
 --
 -- Tabellen gesteuerter Interpreter für Kellerautomaten.
 --
--- palTab :: [(([Attribute [Char]] -> Tag [Char], Integer, [Attribute [Char]] -> Tag [Char]), (Integer, [Char]))]
---palTab :: [( ( Tag, Integer, Tag ), ( Integer, String ) )]
+palTab :: [( (String  , Integer), (Integer, String))]
 palTab = [ ( ("TR"    , 0 ), (1, "") )
 
          , ( ("TH"    , 1 ), (2, "") )
@@ -35,15 +34,37 @@ palTab = [ ( ("TR"    , 0 ), (1, "") )
 --         , ( ("/TR"   , 6 ), (3, "") )
          ]
 --
+--
+--arrayToListTupel :: [[[String]]] -> [(String, [(String, [[String]])])]
+arrayToListTupel ( (_ : rowTableHead) : ((time : columns) : lines) ) = joinDayAndTime tableHead columns
+  where
+   tableHead = concat rowTableHead
+--
+joinDayAndTime :: [String] -> [[String]] -> [(String, [[String]])]
+joinDayAndTime [] _ = []
+joinDayAndTime _ [] = []
+-- joinDayAndTime aday ([] : columns) = joinDayAndTime aday columns
+joinDayAndTime aday@(day : days) (column@(elm1 : elemN) : columns) = 
+   case elm1 of
+    "\160" -> (day, []) : (joinDayAndTime days columns)
+    []     -> joinDayAndTime aday columns
+    _      -> (day,moreElem) : (joinDayAndTime days restElem)
+     where
+      (moreElem, restElem) = readMoreElem (column : columns)
+--
+readMoreElem [] = ([], [])
+readMoreElem (column : columns) = 
+   case column of
+    []     -> ([], columns)
+    _      -> (((column) : elemN), rest)
+     where
+      (elemN, rest) = readMoreElem columns
+--
 --testFile :: IO String
 testFile = do 
 --   htmlCode <- readFile "testTimeTable.html"
-   htmlCode <- readFile "s_bai6_unix.html"
-   print $ reverse $ test htmlCode
---
-printHTML = do
-   htmlCode <- readFile "s_bai6_unix.html"
-   print $ parseTags htmlCode
+   htmlCode <- readFile "../vorlage/s_bai6_unix.html"
+   print $ arrayToListTupel $ reverse $ test htmlCode
 --
 test htmlCode = checkState (parseTags htmlCode) 0 palTab [] [] []
 --
