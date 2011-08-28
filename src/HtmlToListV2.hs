@@ -1,4 +1,6 @@
-module HtmlToListV2 where
+module HtmlToListV2 ( tableList'
+                    , testFile
+                    ) where
 --
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Tree
@@ -14,16 +16,13 @@ palTab = [ ( ("TR"    , 0 ), (1, "") )
 
          , ( ("TEXT!" , 2 ), (2, "PUSH") ) -- "TEXT!" ist selber definiert!
          , ( ("/TH"   , 2 ), (1, "") )
---         , ( ("/TR"   , 2 ), (0, "") )
 
          , ( ("TEXT!" , 3 ), (3, "PUSH") ) -- "TEXT!" ist selber definiert!
          , ( ("TABLE" , 3 ), (4, "") )
---         , ( ("/TABLE", 3 ), (1, "") )
          , ( ("/TD"   , 3 ), (1, "") )
 
          , ( ("/TABLE", 4 ), (3, "") )
          , ( ("TR"    , 4 ), (5, "") )
---         , ( ("/TR"   , 4 ), (3, "") )
 
          , ( ("TD"    , 5 ), (6, "") )
          , ( ("/TR"   , 5 ), (4, "") )
@@ -31,23 +30,25 @@ palTab = [ ( ("TR"    , 0 ), (1, "") )
          , ( ("TEXT!" , 6 ), (6, "PUSH") )
          , ( ("IMAG!" , 6 ), (6, "PUSH") )
          , ( ("/TD"   , 6 ), (5, "") )
---         , ( ("/TR"   , 6 ), (3, "") )
          ]
 --
 --
---arrayToListTupel :: [[[String]]] -> [(String, [(String, [[String]])])]
+tableList' :: String -> [(String, [(String, [[String]])])]
+tableList' htmlCode = arrayToListTupel $ reverse $ checkState (parseTags htmlCode) 0 palTab [] [] []
+--
+-- | This function transform the list from the checkState function into the temporary structure
+arrayToListTupel :: [[[String]]] -> [(String, [(String, [[String]])])]
 arrayToListTupel ( _ : [] ) = []
---arrayToListTupel ( (_ : rowTableHead) : ((time : columns) : lines) ) = joinDayAndTime tableHead columns
-arrayToListTupel ( rowDays@(_ : rowTableHead) : (((time : _) : columns) : lines) ) =  ( (time, (joinDayAndTime tableHead columns))
-                                                                                : (arrayToListTupel (rowDays : lines) )
-                                                                                )
+arrayToListTupel ( rowDays@(_ : rowTableHead) : (((time : _) : columns) : lines) ) =  
+    ( (time, (joinDayAndTime tableHead columns))
+    : (arrayToListTupel (rowDays : lines) )
+    )
   where
    tableHead = concat rowTableHead
 --
 joinDayAndTime :: [String] -> [[String]] -> [(String, [[String]])]
 joinDayAndTime [] _ = []
 joinDayAndTime _ [] = []
--- joinDayAndTime aday ([] : columns) = joinDayAndTime aday columns
 joinDayAndTime aday@(day : days) (column@(elm1 : elemN) : columns) = 
    case elm1 of
     "\160" -> (day, []) : (joinDayAndTime days columns)
@@ -56,6 +57,7 @@ joinDayAndTime aday@(day : days) (column@(elm1 : elemN) : columns) =
      where
       (moreElem, restElem) = readMoreElem (column : columns)
 --
+readMoreElem :: [[String]] -> ([[String]],[[String]])
 readMoreElem [] = ([], [])
 readMoreElem (column : columns) = 
    case column of
@@ -64,21 +66,16 @@ readMoreElem (column : columns) =
      where
       (elemN, rest) = readMoreElem columns
 --
---testFile :: IO String
 testFile = do 
---   htmlCode <- readFile "testTimeTable.html"
    htmlCode <- readFile "../vorlage/s_bai6_unix.html"
    print $ arrayToListTupel $ reverse $ test htmlCode
 --
 test htmlCode = checkState (parseTags htmlCode) 0 palTab [] [] []
 --
-tableList' :: String -> [(String, [(String, [[String]])])]
-tableList' htmlCode = arrayToListTupel $ reverse $ checkState (parseTags htmlCode) 0 palTab [] [] []
---
+-- | Dissolve the Tag String in a tuple with tag and datas
 intKA :: Tag [Char] -> (String, String)
 intKA input =
   case input of
---   TagOpen  tag _     -> (tag, [])
    TagOpen  "TR"    _ -> ("TR", [])
    TagOpen  "TD"    _ -> ("TD", [])
    TagOpen  "TH"    _ -> ("TH", [])
@@ -91,89 +88,70 @@ intKA input =
    TagText      value -> ("TEXT!", value)
    _                  -> ([], [])
 --
---
-checkState :: [Tag [Char]] -> Integer ->  [((String, Integer), (Integer, String))] -> [String] -> [[String]] -> [[[String]]] -> [[[String]]]
-checkState [] _ _ _ _ kellerBestandVoll = kellerBestandVoll
-checkState (input : inputs) zustand zustandsTabelle kellerBestand1 kellerBestand2 kellerBestandVoll =
+-- | This function search in the stateTable about the follow states.
+--   When it find one then the function is looking for a action
+checkState :: [Tag [Char]] -> Integer ->  [((String, Integer), (Integer, String))] -> [String] -> [[String]] -> [[[String]]] 
+           -> [[[String]]] -- ^ Returns a reverse element structure
+checkState [] _ _ _ _ stackStockFul = stackStockFul
+checkState (input : inputs) state stateTable stackStock1 stackStock2 stackStockFul =
     if (folgZ == []) 
      then
-      -- kein Folgezustand gefunden
-       checkState inputs zustand zustandsTabelle kellerBestand1 kellerBestand2 kellerBestandVoll
+      -- no follow state located
+       checkState inputs state stateTable  stackStock1 stackStock2 stackStockFul
      else
-      -- Folgezustand vorhanden
+      -- follow state located
       case tag of 
-       "/TD"  ->
-        checkState inputs
-                   (head folgZ) 
-                   zustandsTabelle 
-                   []  
-                   ((reverse kellerBestand1) : kellerBestand2)
-                   kellerBestandVoll
-       "/TH"  -> 
-        checkState inputs
-                   (head folgZ)
-                   zustandsTabelle
-                   []
-                   ((reverse kellerBestand1) : kellerBestand2)
-                   kellerBestandVoll
+       "/TD"  -> closeTDTH
+       "/TH"  -> closeTDTH
 -- -----------------------------------------------------------------
        "/TR"  ->
-        if ( zustand < 4 )
-         then 
-          checkState inputs
-                     (head folgZ)
-                     zustandsTabelle
-                     []
-                     []
-                     ((reverse kellerBestand2) : kellerBestandVoll)
-         else
-          checkState inputs
-                     (head folgZ)
-                     zustandsTabelle
-                     (kellerAktion kellerBestand1 (tag, zustand) value zustandsTabelle)
-                     kellerBestand2
-                     kellerBestandVoll
-       _      ->
-        checkState inputs
-                   (head folgZ)
-                   zustandsTabelle
-                   (kellerAktion kellerBestand1 (tag, zustand) value zustandsTabelle)
-                   kellerBestand2
-                   kellerBestandVoll
+        if ( state < 4 )
+         -- when this is calling then a complete line is readed
+         then closeTR
+         -- when this is calling then the line break is to deep
+         else anythingElse
+-- -----------------------------------------------------------------
+       -- this was call when the information finder are running
+       _      -> anythingElse
     where 
      (tag, value) = intKA input
-     folgZ        = folgeZustand (tag, zustand) value zustandsTabelle
+     folgZ        = findFollowState (tag, state) value stateTable
+     closeTDTH    = checkState inputs (head folgZ) stateTable [] ((reverse stackStock1) : stackStock2) stackStockFul
+     closeTR      = checkState inputs (head folgZ) stateTable [] [] ((reverse stackStock2) : stackStockFul)
+     anythingElse = checkState inputs (head folgZ) stateTable (stackAction stackStock1 (tag, state) value stateTable) stackStock2 stackStockFul
 --
 --
---
-kellerAktion :: [String] -> (String, Integer) -> String -> [((String, Integer), (Integer, String))] -> [String]
-kellerAktion kellerBestand _ _ [] = kellerBestand
-kellerAktion kellerBestand eingabeFolge@(hEingabe, state) value ( (zustandInfo, (folgeZustandVar,aktion)) : rest) = 
-   if ( eingabeFolge == zustandInfo )
+-- | This function is searching for a follow state and do a action.
+stackAction :: [String] -> (String, Integer) -> String -> [((String, Integer), (Integer, String))] -> [String]
+stackAction stackStock _ _ [] = stackStock
+stackAction stackStock inputFollow value ( (stateInfo, (_ ,action)) : rest) = 
+   if ( inputFollow == stateInfo )
     then
      -- Aktion ausführen
-     doAktion kellerBestand value aktion
+     doAktion stackStock value action
     else
      -- weiter suchen
-     kellerAktion kellerBestand eingabeFolge value rest
+     stackAction stackStock inputFollow value rest
 --
---
+-- | This function do actions.
 doAktion :: [String] ->  String -> String -> [String]
-doAktion kellerBestand hEingabe aktion = 
-   case aktion of
-    "PUSH"   ->  hEingabe : kellerBestand
-    _ -> kellerBestand
+doAktion stackStock findedDatas action = 
+   case action of
+    -- | Save the finded datas in a list
+    "PUSH"   ->  findedDatas : stackStock
+    -- | Return the stack when no action available
+    _ -> stackStock
 --
---
-folgeZustand :: (String, Integer) -> String -> [((String, Integer), (Integer, String))] -> [Integer]
-folgeZustand _ _ [] = []
-folgeZustand eingabe value zustandsTabelle@( (zustandInfo, (folgeZustandVar, _)) : rest ) = 
-   if ( eingabe == zustandInfo )
+-- | This function is for finding the next state.
+findFollowState :: (String, Integer) -> String -> [((String, Integer), (Integer, String))] -> [Integer]
+findFollowState _ _ [] = []
+findFollowState input value ((stateInfo, (followStateVar, _)) : rest ) = 
+   if ( input == stateInfo )
     then
      -- zustand gefunden
-     [folgeZustandVar]
+     [followStateVar]
     else
      -- zustand nicht gefunden
-     folgeZustand eingabe value rest
+     findFollowState input value rest
 --
 --
