@@ -72,13 +72,13 @@ data Event = Event { titleShort  :: String
                    }
                deriving Show 
 --
---
+{-
 instance Eq Event where
   titleShort == titleShort = True
   titleLong  == titleLong  = True
   expireDate == expireDate = True
   eventType  == eventType  = True
---
+-}
 --
 type Events = [Event]
 --

@@ -2,6 +2,7 @@ module Main where
 --
 import HTTPRequest
 import HtmlToList
+import HtmlToListV2
 import Transformer.ListToIS
 --
 import System.Environment
@@ -66,14 +67,16 @@ main = do
    if outputFile == True
     then
      Data.ByteString.Lazy.writeFile "event.json" $ encode $
-             convertISToEventS ( convertListToIS $ tableList daten )
+--             convertISToEventS ( convertListToIS $ tableList daten )
+             convertISToEventS ( convertListToIS $ tableList' daten )
                                2
                                (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
                                ("2009-06-24 12:00:00","2009-06-24 13:30:00")
                                "2009-06-24 12:00:00"
     else
      Data.ByteString.Lazy.putStrLn $ encode $ 
-             convertISToEventS ( convertListToIS $ tableList daten ) 
+--             convertISToEventS ( convertListToIS $ tableList daten ) 
+             convertISToEventS ( convertListToIS $ tableList' daten )
                                2 
                                (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
                                ("2009-06-24 12:00:00","2009-06-24 13:30:00")

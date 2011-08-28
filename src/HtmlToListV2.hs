@@ -1,4 +1,4 @@
-module TabellenInterpreter where
+module HtmlToListV2 where
 --
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Tree
@@ -36,7 +36,11 @@ palTab = [ ( ("TR"    , 0 ), (1, "") )
 --
 --
 --arrayToListTupel :: [[[String]]] -> [(String, [(String, [[String]])])]
-arrayToListTupel ( (_ : rowTableHead) : ((time : columns) : lines) ) = joinDayAndTime tableHead columns
+arrayToListTupel ( _ : [] ) = []
+--arrayToListTupel ( (_ : rowTableHead) : ((time : columns) : lines) ) = joinDayAndTime tableHead columns
+arrayToListTupel ( rowDays@(_ : rowTableHead) : (((time : _) : columns) : lines) ) =  ( (time, (joinDayAndTime tableHead columns))
+                                                                                : (arrayToListTupel (rowDays : lines) )
+                                                                                )
   where
    tableHead = concat rowTableHead
 --
@@ -67,6 +71,9 @@ testFile = do
    print $ arrayToListTupel $ reverse $ test htmlCode
 --
 test htmlCode = checkState (parseTags htmlCode) 0 palTab [] [] []
+--
+tableList' :: String -> [(String, [(String, [[String]])])]
+tableList' htmlCode = arrayToListTupel $ reverse $ checkState (parseTags htmlCode) 0 palTab [] [] []
 --
 intKA :: Tag [Char] -> (String, String)
 intKA input =
