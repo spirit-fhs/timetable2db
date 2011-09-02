@@ -26,10 +26,12 @@ daySlot time ( slotDay, (slot : slots) ) = ((analyseSlot time slotDay slot) : ( 
 --
 -- ==============================================================================================================
 --
+-- [" ","Uebung","DBS\160V1","WKST\160","g","\160\&1","Knolle "]
+--
 -- | Prueft welches Slot Schema auf die Liste angewendet werden kann.
 analyseSlot :: String -> String -> [String] -> Lecture
 -- ^ When in the time slot no lecture are given
-analyseSlot timeOfLecture dayOfLecture [] = EmptyLecture
+analyseSlot _ _ [] = EmptyLecture
 analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, iweek, igroup, ilecturer ] =
      Lecture { day      = dayOfLecture
              , timeSlot = timeStringToTimeSlot timeOfLecture
@@ -43,7 +45,7 @@ analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, iweek, 
 --
 -- Berücksichtigt den fall, dass ein Event einen alternativ Raum hat.
 --
-analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, "*", " ", iweek, igroup, ilecturer ] = 
+analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, "*", "\160", iweek, igroup, ilecturer ] = 
      Lecture { day      = dayOfLecture
              , timeSlot = timeStringToTimeSlot timeOfLecture
              , vtype    = ivtype
@@ -113,7 +115,8 @@ removeSpaceAtEnd ( xString : xssString ) = xString : (removeSpaceAtEnd xssString
 --
 --
 splitLocationANDWeek :: String -> (String, Char)
-splitLocationANDWeek (' ' : x : xss) = ( [], x)
+-- splitLocationANDWeek (' ' : x : xss) = ( [], x)
+splitLocationANDWeek ('\160' : x : xss) = ( [], x)
 splitLocationANDWeek (x : xss)       = ( x : (fst (splitLocationANDWeek xss)), (snd (splitLocationANDWeek xss)))
 --
 --
@@ -130,10 +133,10 @@ timeStringToTimeSlot ( h12 : _ : m11 : m12 : _ : h21 : h22 : _ : m21 : m22 : rst
 --
 --
 locationStringToLocation :: String -> Location
-locationStringToLocation "WKST " = Location{building="B", room="WKST"}
-locationStringToLocation "PC2 "  = Location{building="F", room="PC2"}
+locationStringToLocation "WKST\160" = Location{building="B", room="WKST"}
+locationStringToLocation "PC2\160"  = Location{building="F", room="PC2"}
 --locationStringToLocation "D117\160"  = Location{building="D", room="117"}
-locationStringToLocation "PC3 "  = Location{building="F", room="PC3"}
+locationStringToLocation "PC3\160"  = Location{building="F", room="PC3"}
 --locationStringToLocation "B231\160"  = Location{building="B", room="231"}
 -- TODO: es muss ein ordentlicher Parser gebaut werden.
 locationStringToLocation (room : number) = Location{building=[room], room=number}
@@ -145,7 +148,7 @@ printTimeTable :: TimeTable -> IO ()
 printTimeTable [] = return ()
 printTimeTable (lecture : timeTable) = do
      print lecture
-     print "---------"
+--     print "---------"
      printTimeTable timeTable
 --
 --

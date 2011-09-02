@@ -45,7 +45,7 @@ main = do
    daten <- requestHTML filePath
    if debug == True 
     then
-     print $ tableList daten
+     print $ tableList' daten
     else
      print ""
 --   print "----------------------"
@@ -56,11 +56,13 @@ main = do
 --
 -- Check debuging
 -- ===============================================
+--
    if debug == True
     then
-     print $ convertListToIS $ tableList daten
+     print $ convertListToIS $ tableList' daten
     else
      print ""
+--
 -- ===============================================
 --
 -- When the outputFile are True then the timetable JSON data are write to file.
@@ -68,7 +70,7 @@ main = do
     then
      Data.ByteString.Lazy.writeFile "event.json" $ encode $
 --             convertISToEventS ( convertListToIS $ tableList daten )
-             convertISToEventS ( convertListToIS $ tableList' daten )
+             convertISToEventS ( convertListToIS ( tableList' daten ) )
                                2
                                (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
                                ("2009-06-24 12:00:00","2009-06-24 13:30:00")
@@ -91,6 +93,14 @@ main = do
                                ("2009-06-24 12:00:00","2009-06-24 13:30:00")
                                "2009-06-24 12:00:00"
 -}
+
+   print "End"
+--
+debugConvListToIS url = do
+   daten <- requestHTML url
+   print $ tableList' daten
+   print $ convertListToIS $ tableList' daten
+
 --
 test_rentable =  
                            (convertISToEventS [testLecture] 

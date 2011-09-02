@@ -46,7 +46,12 @@ data TimeSlot  = TimeSlot    { tstart  :: TimeStamp
                              , tend    :: TimeStamp
                              }
                              deriving (Read,Eq)
---                             deriving (Show, Read)
+instance Show TimeSlot where
+  show = timeSlotToString
+--
+timeSlotToString :: TimeSlot -> String
+timeSlotToString timeSlot = (houre (tstart timeSlot)) ++ "." ++ (minute (tstart timeSlot))
+                ++ "-" ++ (houre (tend timeSlot)) ++ "." ++ (minute (tend timeSlot))
 --
 -- | 
 {-
@@ -74,8 +79,20 @@ data Lecture    = Lecture    { day      :: String   -- ^ day of a week
                              , lecturer :: String   -- ^ describe the dozent name that hold the schedule
                              }
                 | EmptyLecture 
-                             deriving (Show, Read, Eq)
---                             deriving Read
+                             deriving (Read, Eq)
+instance Show Lecture where
+  show = printLecture
+
+printLecture :: Lecture -> String
+--printLecture lecture = day lecture
+printLecture lecture =      (day      lecture) ++ " " 
+                    ++ show (timeSlot lecture) ++ " "
+                    ++      (vtype    lecture) ++ " " 
+                    ++      (vname    lecture) ++ " " 
+                    ++ show (location lecture) ++ " " 
+                    ++      (week     lecture) ++ " " 
+                    ++      (group    lecture) ++ " " 
+                    ++      (lecturer lecture) ++ "\n"
 --
 -- emptyLecture = Lecture {day="", timeSlot=TimeSlot{tstart=TimeStamp{houre="",minute=""},tend=TimeStamp{houre="",minute=""}},
 --  31                                                      vtype="", vname="", location=Location{building="",room=""}, week="", group="", lecturer=""}
@@ -83,12 +100,5 @@ data Lecture    = Lecture    { day      :: String   -- ^ day of a week
 --
 --
 type TimeTable  = [Lecture]
-
-instance Show TimeSlot where
-  show = timeSlotToString
-
-timeSlotToString :: TimeSlot -> String
-timeSlotToString timeSlot = (houre (tstart timeSlot)) ++ "." ++ (minute (tstart timeSlot))
-                ++ " - " ++ (houre (tend timeSlot)) ++ "." ++ (minute (tend timeSlot))
 --
 --
