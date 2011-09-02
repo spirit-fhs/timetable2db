@@ -7,10 +7,10 @@ import IS
 --
 testLayout :: TimeTable
 testLayout = [Lecture { day="Montag"
-                      , timeSlot=TimeSlot{ tstart=TimeStamp{ houre="8"
+                      , timeSlot=TimeSlot{ tstart=TimeStamp{ hour="8"
                                                            , minute="15"
                                                            }
-                                         , tend  =TimeStamp{ houre="9"
+                                         , tend  =TimeStamp{ hour="9"
                                                            , minute="45"
                                                            }
                                          }
@@ -22,10 +22,10 @@ testLayout = [Lecture { day="Montag"
                       , lecturer="Braun"
                       }
              ,Lecture { day="Montag"
-                      , timeSlot=TimeSlot{ tstart=TimeStamp{ houre="8"
+                      , timeSlot=TimeSlot{ tstart=TimeStamp{ hour="8"
                                                            , minute="15"
                                                            }
-                                         , tend  =TimeStamp{ houre="9"
+                                         , tend  =TimeStamp{ hour="9"
                                                            , minute="45"
                                                            }
                                          } 

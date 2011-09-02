@@ -94,7 +94,7 @@ printLecture lecture =      (day      lecture) ++ " "
                     ++      (group    lecture) ++ " " 
                     ++      (lecturer lecture) ++ "\n"
 --
--- emptyLecture = Lecture {day="", timeSlot=TimeSlot{tstart=TimeStamp{hour="",minute=""},tend=TimeStamp{houre="",minute=""}},
+-- emptyLecture = Lecture {day="", timeSlot=TimeSlot{tstart=TimeStamp{hour="",minute=""},tend=TimeStamp{hour="",minute=""}},
 --  31                                                      vtype="", vname="", location=Location{building="",room=""}, week="", group="", lecturer=""}
 
 --

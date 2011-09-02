@@ -104,7 +104,7 @@ analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, iweek, 
              , lecturer = ilecturer
              }
 -}
---analyseSlot time day lecture = Lecture {day="", timeSlot=TimeSlot{tstart=TimeStamp{hour="",minute=""},tend=TimeStamp{houre="",minute=""}},
+--analyseSlot time day lecture = Lecture {day="", timeSlot=TimeSlot{tstart=TimeStamp{hour="",minute=""},tend=TimeStamp{hour="",minute=""}},
 --                                        vtype="", vname="", location=Location{building="",room=""}, week="", group=0, lecturer=""}
 --
 --
