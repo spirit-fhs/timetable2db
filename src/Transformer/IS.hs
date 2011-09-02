@@ -45,22 +45,22 @@ instance Eq TimeStamp where
 data TimeSlot  = TimeSlot    { tstart  :: TimeStamp
                              , tend    :: TimeStamp
                              }
-                             deriving (Read)
+                             deriving (Read,Eq)
 --                             deriving (Show, Read)
 --
 -- | 
---
+{-
 data VType      = Vorlesung | Uebung
                   deriving (Show, Read)
---
+-}
 data Location   = Location   { building :: String
                              , room     :: String
                              }
-                             deriving (Show, Read)
---
+                             deriving (Show, Read, Eq)
+{-
 data Week       = Gerade | Ungerade | Woechentlich
                   deriving (Show, Read)
---
+-}
 -- | Beschreibt die Datenstruktur des Stundenplans. 
 --
 --
@@ -74,7 +74,7 @@ data Lecture    = Lecture    { day      :: String   -- ^ day of a week
                              , lecturer :: String   -- ^ describe the dozent name that hold the schedule
                              }
                 | EmptyLecture 
-                             deriving (Show, Read)
+                             deriving (Show, Read, Eq)
 --                             deriving Read
 --
 -- emptyLecture = Lecture {day="", timeSlot=TimeSlot{tstart=TimeStamp{houre="",minute=""},tend=TimeStamp{houre="",minute=""}},
