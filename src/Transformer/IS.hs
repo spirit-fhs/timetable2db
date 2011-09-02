@@ -33,6 +33,10 @@ data TimeStamp = TimeStamp   { houre  :: String -- ^ Stunde eines Tages
                              , minute :: String -- ^ Minute einer Stunde
                              }
                              deriving (Show, Read)
+instance Eq TimeStamp where
+  a == b =  (houre a) == (houre b) 
+         && (minute a) == (minute b)
+--  _ == _ = False
 --
 -- | Der Datentype TimeSlot besteht aus einer anfangs und ende Zeit.
 --
@@ -41,7 +45,8 @@ data TimeStamp = TimeStamp   { houre  :: String -- ^ Stunde eines Tages
 data TimeSlot  = TimeSlot    { tstart  :: TimeStamp
                              , tend    :: TimeStamp
                              }
-                             deriving (Show, Read)
+                             deriving (Read)
+--                             deriving (Show, Read)
 --
 -- | 
 --
@@ -78,10 +83,10 @@ data Lecture    = Lecture    { day      :: String   -- ^ day of a week
 --
 --
 type TimeTable  = [Lecture]
-{-
+
 instance Show TimeSlot where
   show = timeSlotToString
--}
+
 timeSlotToString :: TimeSlot -> String
 timeSlotToString timeSlot = (houre (tstart timeSlot)) ++ "." ++ (minute (tstart timeSlot))
                 ++ " - " ++ (houre (tend timeSlot)) ++ "." ++ (minute (tend timeSlot))
