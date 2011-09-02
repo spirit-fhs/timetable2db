@@ -104,7 +104,7 @@ analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, iweek, 
              , lecturer = ilecturer
              }
 -}
---analyseSlot time day lecture = Lecture {day="", timeSlot=TimeSlot{tstart=TimeStamp{houre="",minute=""},tend=TimeStamp{houre="",minute=""}},
+--analyseSlot time day lecture = Lecture {day="", timeSlot=TimeSlot{tstart=TimeStamp{hour="",minute=""},tend=TimeStamp{houre="",minute=""}},
 --                                        vtype="", vname="", location=Location{building="",room=""}, week="", group=0, lecturer=""}
 --
 --
@@ -122,13 +122,13 @@ splitLocationANDWeek (x : xss)       = ( x : (fst (splitLocationANDWeek xss)), (
 --
 timeStringToTimeSlot :: String -> TimeSlot
 timeStringToTimeSlot ( h11 : h12 : _ : m11 : m12 : _ : h21 : h22 : _ : m21 : m22 : rst ) =
-     TimeSlot { tstart = TimeStamp { houre = [h11,h12] , minute = [m11,m12] }
-              , tend   = TimeStamp { houre = [h21,h22] , minute = [m21,m22] }
+     TimeSlot { tstart = TimeStamp { hour = [h11,h12] , minute = [m11,m12] }
+              , tend   = TimeStamp { hour = [h21,h22] , minute = [m21,m22] }
               } 
 --
 timeStringToTimeSlot ( h12 : _ : m11 : m12 : _ : h21 : h22 : _ : m21 : m22 : rst ) = 
-     TimeSlot { tstart = TimeStamp { houre = [h12] , minute = [m11,m12] }
-              , tend   = TimeStamp { houre = [h21,h22] , minute = [m21,m22] }
+     TimeSlot { tstart = TimeStamp { hour = [h12] , minute = [m11,m12] }
+              , tend   = TimeStamp { hour = [h21,h22] , minute = [m21,m22] }
               }
 --
 --

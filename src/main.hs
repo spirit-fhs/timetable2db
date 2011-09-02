@@ -111,8 +111,8 @@ test_rentable =
                            )
   where
    testLecture = Lecture { day="Montag"
-                         , timeSlot=TimeSlot{ tstart=TimeStamp{houre="08",minute="15"}
-                                            , tend  =TimeStamp{houre="09",minute="45"}
+                         , timeSlot=TimeSlot{ tstart=TimeStamp{hour="08",minute="15"}
+                                            , tend  =TimeStamp{hour="09",minute="45"}
                                             }
                          , vtype="Vorlesung"
                          , vname="SWE Prog V3"

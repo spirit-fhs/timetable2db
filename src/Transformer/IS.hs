@@ -27,14 +27,14 @@ data Day       = Montag | Dienstag | Mittwoch | Donnerstag | Freitag | Samstag |
 --
 -- | Der Datentype TimeStamp besteht aus der Stunde und der Minute eines Tages.
 --
--- The datatype TimeStamp describe the houre and minute of a day.
+-- The datatype TimeStamp describe the hour and minute of a day.
 --
-data TimeStamp = TimeStamp   { houre  :: String -- ^ Stunde eines Tages
+data TimeStamp = TimeStamp   { hour  :: String -- ^ Stunde eines Tages
                              , minute :: String -- ^ Minute einer Stunde
                              }
                              deriving (Show, Read)
 instance Eq TimeStamp where
-  a == b =  (houre a) == (houre b) 
+  a == b =  (hour a) == (hour b) 
          && (minute a) == (minute b)
 --  _ == _ = False
 --
@@ -50,8 +50,8 @@ instance Show TimeSlot where
   show = timeSlotToString
 --
 timeSlotToString :: TimeSlot -> String
-timeSlotToString timeSlot = (houre (tstart timeSlot)) ++ "." ++ (minute (tstart timeSlot))
-                ++ "-" ++ (houre (tend timeSlot)) ++ "." ++ (minute (tend timeSlot))
+timeSlotToString timeSlot = (hour (tstart timeSlot)) ++ "." ++ (minute (tstart timeSlot))
+                ++ "-" ++ (hour (tend timeSlot)) ++ "." ++ (minute (tend timeSlot))
 --
 -- | 
 {-
@@ -94,7 +94,7 @@ printLecture lecture =      (day      lecture) ++ " "
                     ++      (group    lecture) ++ " " 
                     ++      (lecturer lecture) ++ "\n"
 --
--- emptyLecture = Lecture {day="", timeSlot=TimeSlot{tstart=TimeStamp{houre="",minute=""},tend=TimeStamp{houre="",minute=""}},
+-- emptyLecture = Lecture {day="", timeSlot=TimeSlot{tstart=TimeStamp{hour="",minute=""},tend=TimeStamp{houre="",minute=""}},
 --  31                                                      vtype="", vname="", location=Location{building="",room=""}, week="", group="", lecturer=""}
 
 --
