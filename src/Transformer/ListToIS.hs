@@ -44,7 +44,7 @@ analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, iweek, 
              }
 --
 -- Berücksichtigt den fall, dass ein Event einen alternativ Raum hat.
---
+{-
 analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, "*", iweek, ilecturer ] =
      Lecture { day      = dayOfLecture
              , timeSlot = timeStringToTimeSlot timeOfLecture
@@ -55,7 +55,7 @@ analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, "*", iw
              , group    = ""
              , lecturer = removeSpaceAtEnd ilecturer
              }
---
+-}
 analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, "*", "\160", iweek, igroup, ilecturer ] = 
      Lecture { day      = dayOfLecture
              , timeSlot = timeStringToTimeSlot timeOfLecture

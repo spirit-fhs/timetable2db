@@ -33,7 +33,7 @@ test_convertListToIS = assertBool "Test convertListToIS test one"
                            ( (convertListToIS [("08.15-09.45", [("Montag", [[" ","Uebung","MMuKS\160V2","PC2\160","g","\160\&2","Brothuhn "]])])] 
                              )
                              == 
-                             [Lecture { day = "SWE Prog V3"
+                             [Lecture { day = "Montag"
                                       , timeSlot = TimeSlot{ tstart=TimeStamp{hour="08",minute="15"}
                                                            , tend  =TimeStamp{hour="09",minute="45"}
                                                            }
@@ -41,25 +41,11 @@ test_convertListToIS = assertBool "Test convertListToIS test one"
                                       , vname="MMuKS V2"
                                       , Transformer.IS.location=Transformer.IS.Location{ Transformer.IS.building="F"
                                                                                        , Transformer.IS.room="PC2"}
-                                      , week="Gerade"
-                                      , group="2"
+                                      , week="g"
+                                      , group="\160\&2"
                                       , lecturer="Brothuhn"
                                       }
                              ]
                            )
-
-  where
-   testLecture =    Lecture { day="Montag"
-                            , timeSlot=TimeSlot{ tstart=TimeStamp{hour="08",minute="15"}
-                                               , tend  =TimeStamp{hour="09",minute="45"}
-                                               }
-                            , vtype="Vorlesung"
-                            , vname="SWE Prog V3"
-                            , Transformer.IS.location=Transformer.IS.Location{Transformer.IS.building="F"
-                                                                             ,Transformer.IS.room="004"}
-                            , week="Woechentlich"
-                            , group=""
-                            , lecturer="Braun"
-                            }
 --
 --
