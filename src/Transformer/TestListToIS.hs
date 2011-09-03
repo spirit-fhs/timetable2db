@@ -1,4 +1,4 @@
-module TestListToIS where
+module Transformer.TestListToIS where
 --
 import Test.QuickCheck
 --
@@ -8,8 +8,9 @@ import Test.HUnit
 --
 --
 import Transformer.ListToIS
----import qualified Transformer.IS as IS
 import Transformer.IS
+---import qualified Transformer.IS as IS
+--import Transformer.IS
 --import Transformer.Event.EventS
 import qualified Data.Map as M
 --
@@ -19,7 +20,7 @@ main = defaultMain tests
 --
 tests = [
          testGroup "HUnit Tests - One copy"
-          [ testCase "All titles are rentable." test_rentable
+          [ testCase "Test one" test_convertListToIS
           ]
         ]
 --
@@ -28,35 +29,23 @@ tests = [
 --
 --
 --
-test_rentable = assertBool "moop" 
-                           ( (convertISToEventS [testLecture] 
-                                                2 
-                                                ( M.fromList [("Braun",["braun"])] )
-                                                ("2009-06-24 12:00:00","2009-06-24 13:30:00")
-                                                "2009-06-24 12:00:00" 
+test_convertListToIS = assertBool "Test convertListToIS test one" 
+                           ( (convertListToIS [("08.15-09.45", [("Montag", [[" ","Uebung","MMuKS\160V2","PC2\160","g","\160\&2","Brothuhn "]])])] 
                              )
                              == 
-                             [Event { titleShort = "SWE Prog V3"
-                                    , titleLong = ""
-                                    , expireDate = "2009-06-24 12:00:00"
-                                    , eventType = "Lecture"
-                                    , degreeClass = [DegreeClass {class_id = 2}]
-                                    , member = [FhsID {fhs_id = "braun"}]
-                                    , appointment = []
-                                    }
+                             [Lecture { day = "SWE Prog V3"
+                                      , timeSlot = TimeSlot{ tstart=TimeStamp{hour="08",minute="15"}
+                                                           , tend  =TimeStamp{hour="09",minute="45"}
+                                                           }
+                                      , vtype="Uebung"
+                                      , vname="MMuKS V2"
+                                      , Transformer.IS.location=Transformer.IS.Location{ Transformer.IS.building="F"
+                                                                                       , Transformer.IS.room="PC2"}
+                                      , week="Gerade"
+                                      , group="2"
+                                      , lecturer="Brothuhn"
+                                      }
                              ]
-
-{-
-                             [{ "appointment":[]
-                              , "degreeClass":[{"class_id":2}]
-                              , "eventType":"Lecture"
-                              , "expireDate":"2009-06-24 12:00:00"
-                              , "member":[{"fhs_id":"recknage"}]
-                              ,"titleLong":""
-                              ,"titleShort":"Alg/GrMa1V"
-                              }
-                             ] 
--}
                            )
 
   where
