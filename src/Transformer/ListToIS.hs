@@ -45,6 +45,17 @@ analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, iweek, 
 --
 -- Berücksichtigt den fall, dass ein Event einen alternativ Raum hat.
 --
+analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, "*", iweek, ilecturer ] =
+     Lecture { day      = dayOfLecture
+             , timeSlot = timeStringToTimeSlot timeOfLecture
+             , vtype    = ivtype
+             , vname    = ivname
+             , location = locationStringToLocation ilocation
+             , week     = iweek
+             , group    = ""
+             , lecturer = removeSpaceAtEnd ilecturer
+             }
+--
 analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, "*", "\160", iweek, igroup, ilecturer ] = 
      Lecture { day      = dayOfLecture
              , timeSlot = timeStringToTimeSlot timeOfLecture
@@ -109,8 +120,9 @@ analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, iweek, 
 --
 --
 removeSpaceAtEnd :: String -> String
---removeSpaceAtEnd [] = []
+removeSpaceAtEnd [] = []
 removeSpaceAtEnd ( ' ' : [] ) = []
+removeSpaceAtEnd ( '\160' : [] ) = []
 removeSpaceAtEnd ( xString : xssString ) = xString : (removeSpaceAtEnd xssString)
 --
 --
@@ -139,7 +151,7 @@ locationStringToLocation "PC2\160"  = Location{building="F", room="PC2"}
 locationStringToLocation "PC3\160"  = Location{building="F", room="PC3"}
 --locationStringToLocation "B231\160"  = Location{building="B", room="231"}
 -- TODO: es muss ein ordentlicher Parser gebaut werden.
-locationStringToLocation (room : number) = Location{building=[room], room=number}
+locationStringToLocation (room : number) = Location{building=[room], room=(removeSpaceAtEnd number)}
 --
 --
 --
