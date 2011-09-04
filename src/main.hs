@@ -26,12 +26,18 @@ import RestService
 -- filePath = "../vorlage/s_bamm6.html"
 -- iconv --from-code=ISO-8859-1 --to-code=UTF-8 s_bamm6.html > s_bamm6_unix.html
 --
--- :main "http://sund.de/steffen/plan/s_bai1.html"  -> geht
--- :main "http://sund.de/steffen/plan/s_bai2.html"  -> geht
--- :main "http://sund.de/steffen/plan/s_bai6.html"  -> geht
--- :main "http://sund.de/steffen/plan/s_bamm6.html" -> geht
--- :main "http://sund.de/steffen/plan/block_sq_bai4.html" -> geht
---
+-- :main "http://sund.de/steffen/plan/s_bai1.html"         -> geht
+-- :main "http://sund.de/steffen/plan/s_bai2.html"         -> geht
+-- :main "http://sund.de/steffen/plan/s_bai6.html"         -> geht
+-- :main "http://sund.de/steffen/plan/s_bamm6.html"        -> geht
+-- :main "http://sund.de/steffen/plan/block_sq_bai4.html"  -> geht
+-- :main "http://sund.de/steffen/plan/block_sq_bais6.html" -> geht
+-- :main "http://sund.de/steffen/plan/block_sq_bawi4.html" -> geht
+-- :main "http://sund.de/steffen/plan/block_mps.html"      -> geht
+-- :main "http://sund.de/steffen/plan/block_sq_bamm6.html" -> geht
+-- :main "http://sund.de/steffen/plan/block_pr_sent.html"
+-- :main "http://sund.de/steffen/plan/block_gai.html"
+-- :main "http://sund.de/steffen/plan/block_itsuim.html"
 --
 debug :: Bool
 debug = True

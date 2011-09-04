@@ -1,13 +1,12 @@
 module HtmlToListV2 ( tableList'
-                    , testFile
+--                    , testFile
                     ) where
 --
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Tree
 import Data.Char
 --
--- Tabellen gesteuerter Interpreter für Kellerautomaten.
---
+-- | Table for the automat to control them
 palTab :: [( (String  , Integer), (Integer, String))]
 palTab = [ ( ("TR"    , 0 ), (1, "") )
 
@@ -33,7 +32,7 @@ palTab = [ ( ("TR"    , 0 ), (1, "") )
          , ( ("/TD"   , 6 ), (5, "") )
          ]
 --
---
+-- | This function converts the HTML string in the temporary structure.
 tableList' :: String -> [(String, [(String, [[String]])])]
 tableList' htmlCode = arrayToListTupel $ reverse $ checkState (parseTags htmlCode) 0 palTab [] [] []
 --
@@ -47,6 +46,7 @@ arrayToListTupel ( rowDays@(_ : rowTableHead) : (((time : _) : columns) : lines)
   where
    tableHead = concat rowTableHead
 --
+-- | Join the day with the slots behind them.
 joinDayAndTime :: [String] -> [[String]] -> [(String, [[String]])]
 joinDayAndTime [] _ = []
 joinDayAndTime _ [] = []
@@ -58,6 +58,7 @@ joinDayAndTime aday@(day : days) (column@(elm1 : elemN) : columns) =
      where
       (moreElem, restElem) = readMoreElem (column : columns)
 --
+-- | Read all lectures in the slot.
 readMoreElem :: [[String]] -> ([[String]],[[String]])
 readMoreElem [] = ([], [])
 readMoreElem (column : columns) = 
@@ -67,11 +68,6 @@ readMoreElem (column : columns) =
      where
       (elemN, rest) = readMoreElem columns
 --
-testFile = do 
-   htmlCode <- readFile "../vorlage/s_bai6_unix.html"
-   print $ arrayToListTupel $ reverse $ test htmlCode
---
-test htmlCode = checkState (parseTags htmlCode) 0 palTab [] [] []
 --
 -- | Dissolve the Tag String in a tuple with tag and datas.
 --   In this function is a "bug" its transform the lower case to
@@ -152,10 +148,10 @@ findFollowState _ _ [] = []
 findFollowState input value ((stateInfo, (followStateVar, _)) : rest ) = 
    if ( input == stateInfo )
     then
-     -- zustand gefunden
+     -- state found
      [followStateVar]
     else
-     -- zustand nicht gefunden
+     -- state not found
      findFollowState input value rest
 --
 --

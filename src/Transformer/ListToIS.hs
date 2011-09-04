@@ -3,22 +3,17 @@ module Transformer.ListToIS where
 import Transformer.IS
 import Data.Char
 --
+-- | Converts the temporary structure in the TimeTable data type.
 convertListToIS :: [(String, [(String, [[String]])])] -> TimeTable
-convertListToIS = rekLine
+--convertListToIS = rekLine
+convertListToIS = concatMap slotsSpliter
 --
--- | Realisiert die Rekursion ueber die Zeilen.
-rekLine :: [(String, [(String, [[String]])])] -> TimeTable
--- rekLine [] = []
--- rekLine ( line : lines ) = (slots line) ++ (rekLine lines)
-rekLine = concatMap slotsSpliter
---
--- | Realisiert die Rekursion ueber die Spalten.
+-- | Make a line about the temporary structure in the TimeTable data type.
 slotsSpliter :: (String, [(String, [[String]])]) -> TimeTable
 slotsSpliter ( _ , []) = []
 slotsSpliter ( time, (slot : slots) ) = (daySlot time slot) ++ (slotsSpliter (time, slots))
 --
--- | Filtert den jeweiligen Spalten Tag herraus und fuegt rekursiv die jeweiligen Lectures in eine
--- Liste ein.
+-- | Take the time and the day and filter the slots behind them.
 daySlot :: String -> (String, [[String]]) -> TimeTable
 daySlot _ ( _, [] ) = []
 daySlot time ( slotDay, (slot : slots) ) = ((analyseSlot time slotDay slot) : ( daySlot time ( slotDay, slots )) )
@@ -28,7 +23,7 @@ daySlot time ( slotDay, (slot : slots) ) = ((analyseSlot time slotDay slot) : ( 
 --
 -- [" ","Uebung","DBS\160V1","WKST\160","g","\160\&1","Knolle "]
 --
--- | Prueft welches Slot Schema auf die Liste angewendet werden kann.
+-- | This function is for matching with the slot structure.
 analyseSlot :: String -> String -> [String] -> Lecture
 -- ^ When in the time slot no lecture are given
 analyseSlot _ _ [] = EmptyLecture
@@ -43,19 +38,7 @@ analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, iweek, 
              , lecturer = removeSpaceAtEnd ilecturer
              }
 --
--- Berücksichtigt den fall, dass ein Event einen alternativ Raum hat.
-{-
-analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, "*", iweek, ilecturer ] =
-     Lecture { day      = dayOfLecture
-             , timeSlot = timeStringToTimeSlot timeOfLecture
-             , vtype    = ivtype
-             , vname    = ivname
-             , location = locationStringToLocation $ removeSpaceAtEnd ilocation
-             , week     = iweek
-             , group    = ""
-             , lecturer = removeSpaceAtEnd ilecturer
-             }
--}
+-- | This alternative is when a lecture have a alternative room.
 analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, "*", "\160", iweek, igroup, ilecturer ] = 
      Lecture { day      = dayOfLecture
              , timeSlot = timeStringToTimeSlot timeOfLecture
@@ -71,7 +54,6 @@ analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, "*", "\
 --  example: [" ","Vorlesung","SWEProg\160V2","H0216\160w\160","Recknagel "]
 -- analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, iweek, ilecturer ] =
 -- analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocationUiweek, ilecturer ] =
-
 analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocationUiweek, ilecturer ] =
     Lecture { day      = dayOfLecture
             , timeSlot = timeStringToTimeSlot timeOfLecture
@@ -87,8 +69,7 @@ analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocationUiweek, i
 --
 --
 --
--- Block veranstaltungen
---
+-- This alternative is for block events
 analyseSlot timeOfLecture dayOfLecture [ ivtype, ivname, ilocation, ilecturer ] = 
     Lecture { day      = dayOfLecture
             , timeSlot = timeStringToTimeSlot timeOfLecture
@@ -103,43 +84,26 @@ analyseSlot timeOfLecture dayOfLecture [ ivtype, ivname, ilocation, ilecturer ] 
 --
 --
 -- ==============================================================================================================
-
-{-
-analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, iweek, igroup, ilecturer ] =
-     Lecture { day      = dayOfLecture
-             , timeSlot = timeStringToTimeSlot timeOfLecture
-             , vtype    = ivtype
-             , vname    = ivname
-             , location = locationStringToLocation ilocation
-             , week     = iweek
---             , group    = igroup
-             , group    = 0
-             , lecturer = ilecturer
-             }
--}
---analyseSlot time day lecture = Lecture {day="", timeSlot=TimeSlot{tstart=TimeStamp{hour="",minute=""},tend=TimeStamp{hour="",minute=""}},
---                                        vtype="", vname="", location=Location{building="",room=""}, week="", group=0, lecturer=""}
 --
---
+-- | This function removes the space at the end of a string.
 removeSpaceAtEnd :: String -> String
 removeSpaceAtEnd [] = []
 removeSpaceAtEnd ( ' ' : [] ) = []
 removeSpaceAtEnd ( '\160' : [] ) = []
 removeSpaceAtEnd ( xString : xssString ) = xString : (removeSpaceAtEnd xssString)
 --
---
+-- | This function splits the Location and week at one string by a space.
 splitLocationANDWeek :: String -> (String, Char)
 splitLocationANDWeek (' ' : x : xss) = ( [], x)
 splitLocationANDWeek ('\160' : x : xss) = ( [], x)
 splitLocationANDWeek (x : xss)       = ( x : (fst (splitLocationANDWeek xss)), (snd (splitLocationANDWeek xss)))
 --
---
+-- | Transform a time string to a TimeSlot data type.
 timeStringToTimeSlot :: String -> TimeSlot
 timeStringToTimeSlot ( h11 : h12 : _ : m11 : m12 : _ : h21 : h22 : _ : m21 : m22 : rst ) =
      TimeSlot { tstart = TimeStamp { hour = [h11,h12] , minute = [m11,m12] }
               , tend   = TimeStamp { hour = [h21,h22] , minute = [m21,m22] }
               } 
---
 timeStringToTimeSlot ( h12 : _ : m11 : m12 : _ : h21 : h22 : _ : m21 : m22 : rst ) = 
      TimeSlot { tstart = TimeStamp { hour = [h12] , minute = [m11,m12] }
               , tend   = TimeStamp { hour = [h21,h22] , minute = [m21,m22] }

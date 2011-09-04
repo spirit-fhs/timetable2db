@@ -10,10 +10,6 @@ import Control.Applicative ( (<$>), (<*>), pure )
 import Data.ByteString.Lazy (ByteString, putStrLn, writeFile)
 --
 import Transformer.Event.EventS
--- import TestEvents
---
---
---convertISToEventS [Lecture {day="", timeSlot=TimeSlot{tstart=TimeStamp{hour="",minute=""},tend=TimeStamp{hour="",minute=""}}, vtype="", vname="", IS.location=IS.Location{IS.building="",IS.room=""}, week="", group="", lecturer=""}] 2 ["Braun","Hoeller"] ("20...","20....") "20..."
 --
 --
 instance ToJSON DegreeClass where
@@ -24,11 +20,6 @@ instance ToJSON DegreeClass where
 instance ToJSON FhsID where
     toJSON (FhsID fhs_id) =
       object [ "fhs_id" .= fhs_id ]
---
---
---instance ToJSON Member where
---    toJSON (Member member) =
---      object member
 --
 --
 instance ToJSON Location where
@@ -56,13 +47,4 @@ instance ToJSON Event where
              , "appointment" .= appointment
              ]
 --
-{-
-test1 = do
-    Data.ByteString.Lazy.putStrLn $ encode $ testLectur
-
-    Data.ByteString.Lazy.writeFile "event.json" $ encode $ testLectur
-
-  where 
-    jsonCode = toJSON testLectur
--}
 --
