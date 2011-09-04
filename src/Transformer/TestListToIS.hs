@@ -23,6 +23,7 @@ tests = [
           [ testCase "Test convertListToIS_Test1" test_convertListToIS_Test1
           , testCase "Test convertListToIS_Test2" test_convertListToIS_Test2
           , testCase "Test convertListToIS_Test3" test_convertListToIS_Test3
+          , testCase "Test convertListToIS_Test4" test_convertListToIS_Test4
           ]
         ]
 --
@@ -69,7 +70,7 @@ test_convertListToIS_Test2 = assertBool "Test2"
                              ]
                            )
 --
-test_convertListToIS_Test3 = assertBool "Test3"
+test_convertListToIS_Test3 = assertBool "Test3 combination of location and week (H0203\160w\160) room number"
                            ( (convertListToIS [("08.15-09.45", [("Montag", [[" ","Uebung","MMuKS\160V2","H0203\160w\160","Brothuhn "]])])]
                              )
                              ==
@@ -88,8 +89,8 @@ test_convertListToIS_Test3 = assertBool "Test3"
                              ]
                            )
 --
-test_convertListToIS_Test4 = assertBool "Test4"
-                           ( (convertListToIS [("08.15-09.45", [("Montag", [[" ","Uebung","MMuKS\160V2","PC2\160","*","\160","g","\160\&2","Brothuhn "]])])]
+test_convertListToIS_Test4 = assertBool "Test4 combination of location and week (PC2\160w\160) room name"
+                           ( (convertListToIS [("08.15-09.45", [("Montag", [[" ","Uebung","MMuKS\160V2","PC2\160w\160","Brothuhn "]])])]
                              )
                              ==
                              [Lecture { day = "Montag"
