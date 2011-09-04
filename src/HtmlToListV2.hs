@@ -4,6 +4,7 @@ module HtmlToListV2 ( tableList'
 --
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Tree
+import Data.Char
 --
 -- Tabellen gesteuerter Interpreter für Kellerautomaten.
 --
@@ -72,11 +73,14 @@ testFile = do
 --
 test htmlCode = checkState (parseTags htmlCode) 0 palTab [] [] []
 --
--- | Dissolve the Tag String in a tuple with tag and datas
+-- | Dissolve the Tag String in a tuple with tag and datas.
+--   In this function is a "bug" its transform the lower case to
+--   the upper case, better is a function they make that automatically
 intKA :: Tag [Char] -> (String, String)
 intKA input =
   case input of
    TagOpen  "TR"    _ -> ("TR", [])
+   TagOpen  "tr"    _ -> ("TR", [])
    TagOpen  "TD"    _ -> ("TD", [])
    TagOpen  "TH"    _ -> ("TH", [])
    TagOpen  "TABLE" _ -> ("TABLE", [])
@@ -84,7 +88,7 @@ intKA input =
    TagOpen  "img" (_ : ("src", "bilder/monitor.gif") : _)  -> ("IMAG!", "Uebung")
    TagOpen  "img" (_ : ("src", "bilder/buch.gif")    : _)  -> ("IMAG!", "Vorlesung")
 
-   TagClose tag       -> (('/' : tag), [])
+   TagClose tag       -> (('/' : (map toUpper tag)), [])
    TagText      value -> ("TEXT!", value)
    _                  -> ([], [])
 --

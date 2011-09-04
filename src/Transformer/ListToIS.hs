@@ -37,7 +37,7 @@ analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, iweek, 
              , timeSlot = timeStringToTimeSlot timeOfLecture
              , vtype    = ivtype
              , vname    = ivname
-             , location = locationStringToLocation ilocation 
+             , location = locationStringToLocation $ removeSpaceAtEnd ilocation 
              , week     = iweek
              , group    = igroup
              , lecturer = removeSpaceAtEnd ilecturer
@@ -50,7 +50,7 @@ analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, "*", iw
              , timeSlot = timeStringToTimeSlot timeOfLecture
              , vtype    = ivtype
              , vname    = ivname
-             , location = locationStringToLocation ilocation
+             , location = locationStringToLocation $ removeSpaceAtEnd ilocation
              , week     = iweek
              , group    = ""
              , lecturer = removeSpaceAtEnd ilecturer
@@ -61,7 +61,7 @@ analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, "*", "\
              , timeSlot = timeStringToTimeSlot timeOfLecture
              , vtype    = ivtype
              , vname    = ivname
-             , location = locationStringToLocation ilocation 
+             , location = locationStringToLocation $ removeSpaceAtEnd ilocation 
              , week     = iweek
              , group    = igroup
              , lecturer = removeSpaceAtEnd ilecturer
@@ -77,11 +77,13 @@ analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocationUiweek, i
             , timeSlot = timeStringToTimeSlot timeOfLecture
             , vtype    = ivtype
             , vname    = ivname
-            , location = locationStringToLocation $ fst $ splitLocationANDWeek ilocationUiweek 
-            , week     = [snd $ splitLocationANDWeek ilocationUiweek]
+            , location = locationStringToLocation $ removeSpaceAtEnd olocation 
+            , week     = [oweek]
             , group    = ""
             , lecturer = removeSpaceAtEnd ilecturer
             }
+  where 
+   (olocation, oweek) = splitLocationANDWeek ilocationUiweek
 --
 --
 --
@@ -92,10 +94,10 @@ analyseSlot timeOfLecture dayOfLecture [ ivtype, ivname, ilocation, ilecturer ] 
             , timeSlot = timeStringToTimeSlot timeOfLecture
             , vtype    = ivtype
             , vname    = ivname
-            , location = locationStringToLocation ilocation 
+            , location = locationStringToLocation $ removeSpaceAtEnd ilocation 
             , week     = ""
             , group    = ""
-            , lecturer = ilecturer
+            , lecturer = removeSpaceAtEnd ilecturer
             }   
 --
 --
@@ -127,7 +129,7 @@ removeSpaceAtEnd ( xString : xssString ) = xString : (removeSpaceAtEnd xssString
 --
 --
 splitLocationANDWeek :: String -> (String, Char)
--- splitLocationANDWeek (' ' : x : xss) = ( [], x)
+splitLocationANDWeek (' ' : x : xss) = ( [], x)
 splitLocationANDWeek ('\160' : x : xss) = ( [], x)
 splitLocationANDWeek (x : xss)       = ( x : (fst (splitLocationANDWeek xss)), (snd (splitLocationANDWeek xss)))
 --
@@ -144,12 +146,17 @@ timeStringToTimeSlot ( h12 : _ : m11 : m12 : _ : h21 : h22 : _ : m21 : m22 : rst
               }
 --
 --
+-- 
+-- | This function is needed to transfor the location string into
+--   a Location data.
+--   For rooms with names and no building and number there is a matcher.
+--   For a combination about building and number there is a split function.
+--   For example the building is 'H' and the room number is '0202' then the string
+--   is H0202.
 locationStringToLocation :: String -> Location
-locationStringToLocation "WKST\160" = Location{building="B", room="WKST"}
-locationStringToLocation "PC2\160"  = Location{building="F", room="PC2"}
---locationStringToLocation "D117\160"  = Location{building="D", room="117"}
-locationStringToLocation "PC3\160"  = Location{building="F", room="PC3"}
---locationStringToLocation "B231\160"  = Location{building="B", room="231"}
+locationStringToLocation "WKST" = Location{building="B", room="WKST"}
+locationStringToLocation "PC2"  = Location{building="F", room="PC2"}
+locationStringToLocation "PC3"  = Location{building="F", room="PC3"}
 -- TODO: es muss ein ordentlicher Parser gebaut werden.
 locationStringToLocation (room : number) = Location{building=[room], room=(removeSpaceAtEnd number)}
 --
