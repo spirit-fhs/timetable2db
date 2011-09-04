@@ -140,10 +140,10 @@ stackAction stackStock inputFollow value ( (stateInfo, (_ ,action)) : rest) =
 -- | This function do actions.
 doAktion :: [String] ->  String -> String -> [String]
 doAktion stackStock findedDatas action = 
-   case action of
-    -- | Save the finded datas in a list
+   case action of 
+--    -- ^Save the finded datas in a list
     "PUSH"   ->  findedDatas : stackStock
-    -- | Return the stack when no action available
+--    -- | Return the stack when no action available
     _ -> stackStock
 --
 -- | This function is for finding the next state.

@@ -30,13 +30,18 @@ import RestService
 -- :main "http://sund.de/steffen/plan/s_bai2.html"  -> geht
 -- :main "http://sund.de/steffen/plan/s_bai6.html"  -> geht
 -- :main "http://sund.de/steffen/plan/s_bamm6.html" -> geht
+-- :main "http://sund.de/steffen/plan/block_sq_bai4.html" -> geht
+--
 --
 debug :: Bool
 debug = True
 outputFile :: Bool
 outputFile = True
 multiLecturerFile = "MultiLecturer.txt"
-fhsDozentJSON     = "../daten/mongodb_bkp_fhsdozent.json"
+fhsDozentJSON     = "mongodb_bkp_fhsdozent.json"
+--
+-- | The main nedds two files th MultiLecturer.txt and the 
+--   mongodb_bkp_fhsdozent.json
 --
 main = do
    (filePath : args) <- getArgs
@@ -50,8 +55,17 @@ main = do
      print ""
 --   print "----------------------"
 --
--- ^ Read Lecturer in Maps and merge it to one
+--  -- | Read Lecturer in Maps and merge it to one
    transDaten   <- readMultiLecturer multiLecturerFile
+{-
+    where
+     multiLecturerFile = 
+      if configPath == []
+       then
+        "MultiLecturer.txt"
+       else
+        (configPath ++ "MultiLecturer.txt")
+-}
    fhsLecturers <- readJSON          fhsDozentJSON
 --
 -- Check debuging
@@ -95,6 +109,15 @@ main = do
 -}
 
    print "End"
+{-
+    where 
+     (multiLecturerFile, fhsDozentJSON) =
+       if configPath == []
+        then
+         ("MultiLecturer.txt", "mongodb_bkp_fhsdozent.json")
+        else
+         ( (configPath ++ "MultiLecturer.txt"), (configPath ++ "mongodb_bkp_fhsdozent.json"))
+-}
 --
 debugConvListToIS url = do
    daten <- requestHTML url

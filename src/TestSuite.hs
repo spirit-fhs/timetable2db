@@ -13,13 +13,17 @@ import Transformer.IS
 import Transformer.Event.EventS
 import qualified Data.Map as M
 --
+import qualified Transformer.TestListToIS as TestListToIS
 --
 main :: IO ()
-main = defaultMain tests
+main = do
+   defaultMain (tests ++ TestListToIS.tests)
+--   defaultMain TestListToIS.tests
+--   print tests
 --
 tests = [
-         testGroup "HUnit Tests - One copy"
-          [ testCase "All titles are rentable." test_rentable
+         testGroup "HUnit Tests TestSuite - convertISToEventS"
+          [ testCase "Test test_convertISToEventS_Test1" test_convertISToEventS_Test1
           ]
         ]
 --
@@ -28,7 +32,7 @@ tests = [
 --
 --
 --
-test_rentable = assertBool "moop" 
+test_convertISToEventS_Test1 = assertBool "Test1: " 
                            ( (convertISToEventS [testLecture] 
                                                 2 
                                                 ( M.fromList [("Braun",["braun"])] )
@@ -45,20 +49,7 @@ test_rentable = assertBool "moop"
                                     , appointment = []
                                     }
                              ]
-
-{-
-                             [{ "appointment":[]
-                              , "degreeClass":[{"class_id":2}]
-                              , "eventType":"Lecture"
-                              , "expireDate":"2009-06-24 12:00:00"
-                              , "member":[{"fhs_id":"recknage"}]
-                              ,"titleLong":""
-                              ,"titleShort":"Alg/GrMa1V"
-                              }
-                             ] 
--}
                            )
-
   where
    testLecture =    Lecture { day="Montag"
                             , timeSlot=TimeSlot{ tstart=TimeStamp{hour="08",minute="15"}

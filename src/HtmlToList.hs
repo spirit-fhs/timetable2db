@@ -79,8 +79,8 @@ readSlots days (tag : tags) =
 tableTD :: [String] -> [Tag String] -> ([[String]], [Tag String])
 tableTD days (tag : tags) =
      case tag of
-      -- ^ Rekursion ist hier erforderlich, da bis zum /TD gelesen werden muss, dass nach dem /TABLE kommt.
-      -- Sonst passiert es das Zeichen doppelt gelesen werden.
+--      -- ^ Rekursion ist hier erforderlich, da bis zum /TD gelesen werden muss, dass nach dem /TABLE kommt.
+--      -- Sonst passiert es das Zeichen doppelt gelesen werden.
       TagOpen "TABLE" content -> (((fst rek) ++ (fst td)), (snd td))
       TagClose "TD" -> ([], tags)
       _ -> tableTD days tags
@@ -92,7 +92,7 @@ tableTD days (tag : tags) =
 tableTR :: [String] -> [Tag String] -> ([(String, [[String]])], [Tag String])
 tableTR days (tag : tags) =
      case tag of
-      -- ^ Baut ein Tuppel das den Tag und die Liste von Slots beinhaltet, die an diesem Tag statt finden.
+--      -- ^ Baut ein Tuppel das den Tag und die Liste von Slots beinhaltet, die an diesem Tag statt finden.
       TagOpen  "TD" content -> ((((head days), (fst td)) : (fst tr)), 
                                 (snd tr))
       TagClose "TR" -> ([], tags)
@@ -115,7 +115,7 @@ searchTR :: [String] -> [Tag String] -> ([(String, [(String, [[String]])])], [Ta
 searchTR days (tag : tags) =
      case tag of
       TagOpen "TR" content -> ((( time, slot) : (fst rekursion)), ( snd rekursion ))
-      TagClose "TABLE" -> ([], tags)  -- ^ Fuer den fall, dass ein sauberes ende vollzogen werden kann.
+      TagClose "TABLE" -> ([], tags)  --  -- ^ Fuer den fall, dass ein sauberes ende vollzogen werden kann.
       _ -> searchTR days tags
     where
      time     = fst $ findTime tags
