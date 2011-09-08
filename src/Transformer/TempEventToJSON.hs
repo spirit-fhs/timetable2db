@@ -7,15 +7,17 @@ import Data.Attoparsec.Lazy hiding ( take, takeWhile )
 import Control.Applicative ( (<$>), (<*>), pure )
 import Data.ByteString.Lazy (ByteString, putStrLn, writeFile)
 --
-import Transformer.IsToTempEvent
+import Transformer.TempEvent.TempEvent
+import qualified Transformer.IS as IS
 --
 instance ToJSON Alternative where
-  toJSON ( Alternative alterDay alterWeek hour alterLocation alterTitleShort ) = 
+  toJSON ( Alternative alterDay alterWeek hour alterLocation alterTitleShort altereventType ) = 
    object [ "alterDay"        .= alterDay
           , "alterWeek"       .= alterWeek
           , "hour"            .= hour
           , "alterLocation"   .= alterLocation
           , "alterTitleShort" .= alterTitleShort
+          , "altereventType"  .= altereventType
           ]
 {-
 instance ToJSON NoAlternative where
@@ -60,6 +62,9 @@ instance ToJSON TempEvent where
           ]
 --
 --
+--convertIsToTempEvent :: TimeTable -> 
+--
+--
 testTransform = Data.ByteString.Lazy.writeFile "TempEvent.json" $ encode $ tempEvent
   where 
    tempEvent =    
@@ -70,6 +75,7 @@ testTransform = Data.ByteString.Lazy.writeFile "TempEvent.json" $ encode $ tempE
                                                                                        , hour=5
                                                                                        , alterLocation=Place{building="B",room="PC1"}
                                                                                        , alterTitleShort="SWE V3"
+                                                                                       , altereventType="Vorlesung"
                                                                                        }]
                                                              }   
                                           , day="Dienstag"
