@@ -18,6 +18,7 @@ import Transformer.IsToEvent
 -- Libs for working with lecturer database
 import Transformer.Lecturer.MultiLecturer
 import Transformer.Lecturer.ReadFHSLecturer
+import Transformer.TempEvent.TempEventActions
 --
 --
 import RestService
@@ -103,6 +104,8 @@ main = do
                                (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
                                ("2009-06-24 12:00:00","2009-06-24 13:30:00")
                                "2009-06-24 12:00:00"
+--
+   print $ findAlternativeRooms daten
 --
 -- This write the timetable in a special format in a file for a project from Marcus.
 {-

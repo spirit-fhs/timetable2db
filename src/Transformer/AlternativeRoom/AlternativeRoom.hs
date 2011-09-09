@@ -1,4 +1,4 @@
-module Transformer.AlternativeRoom where
+module Transformer.AlternativeRoom.AlternativeRoom where
 -- 
 --
 data Place           = 
@@ -13,6 +13,7 @@ data AlternativeRoom =
                   , state      :: String
                   , location   :: Place
                   , lecturer   :: String
+                  , aType      :: String
                   }
                   deriving (Show, Read)
 --
