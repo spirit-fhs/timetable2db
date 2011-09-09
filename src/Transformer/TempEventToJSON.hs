@@ -52,13 +52,14 @@ instance ToJSON Appointment where
           ]
 --
 instance ToJSON TempEvent where
-  toJSON ( TempEvent appointment className eventType member titleLong titleShort ) = 
+  toJSON ( TempEvent appointment className eventType member titleLong titleShort group ) = 
    object [ "appointment" .= appointment
           , "className"   .= className
           , "eventType"   .= eventType
           , "member"      .= member
           , "titleLong"   .= titleLong
           , "titleShort"  .= titleShort
+          , "group"       .= group
           ]
 --
 --

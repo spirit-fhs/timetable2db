@@ -76,6 +76,7 @@ data Lecture    = Lecture    { day      :: String   -- ^ day of a week
                              , location :: Location -- ^ the location of the schedule
                              , week     :: String   -- ^ describe the week of a schedule (Gerade,Ungerade,Woechentlich)
                              , group    :: String   -- ^ describe the group of a schedule [1..]
+                             , alternat :: Bool
                              , lecturer :: String   -- ^ describe the dozent name that hold the schedule
                              }
                 | EmptyLecture 
@@ -91,7 +92,8 @@ printLecture lecture =      (day      lecture) ++ " "
                     ++      (vname    lecture) ++ " " 
                     ++ show (location lecture) ++ " " 
                     ++      (week     lecture) ++ " " 
-                    ++      (group    lecture) ++ " " 
+                    ++      (group    lecture) ++ " "
+                    ++  show(alternat lecture) ++ " " 
                     ++      (lecturer lecture) ++ "\n"
 --
 -- emptyLecture = Lecture {day="", timeSlot=TimeSlot{tstart=TimeStamp{hour="",minute=""},tend=TimeStamp{hour="",minute=""}},

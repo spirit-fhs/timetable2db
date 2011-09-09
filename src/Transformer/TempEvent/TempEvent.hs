@@ -41,6 +41,7 @@ data TempEvent   = TempEvent   { appointment    :: Appointment
                                , member         :: [Member]
                                , titleLong      :: String
                                , titleShort     :: String
+                               , group          :: String
                                }
                                deriving (Show, Read)
 --

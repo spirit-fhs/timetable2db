@@ -11,6 +11,7 @@ import Data.Aeson.Encode
 import qualified Data.Map as M
 --
 import Transformer.TimeTableToJSONv2
+import Transformer.TempEventToJSON
 --
 import Transformer.IS
 import Transformer.IsToEvent
@@ -19,8 +20,10 @@ import Transformer.IsToEvent
 import Transformer.Lecturer.MultiLecturer
 import Transformer.Lecturer.ReadFHSLecturer
 import Transformer.TempEvent.TempEventActions
+import Transformer.AlternativeRoom.AlternativeRoom
 --
 --
+import Data.List.Split
 import RestService
 -- import qualified Data.ByteString.Lazy as L
 --
@@ -55,6 +58,9 @@ main = do
 --   testTableByFile filePath
 --   daten <- readFile filePath
    daten <- requestHTML filePath
+
+--   print $ head $ splitOn "." $ (splitOn "_" filePath) !! 1
+
    if debug == True 
     then
      print $ tableList' daten
@@ -80,7 +86,9 @@ main = do
 --
    if debug == True
     then
-     print $ convertListToIS $ tableList' daten
+     do
+      print ( convertListToIS ( tableList' daten ) )
+--      print $ map Transformer.IS.week (convertListToIS $ tableList' daten)
     else
      print ""
 --
@@ -105,7 +113,42 @@ main = do
                                ("2009-06-24 12:00:00","2009-06-24 13:30:00")
                                "2009-06-24 12:00:00"
 --
-   print $ findAlternativeRooms daten
+--
+-- Combinate the alternative rooms and the normal time table
+--
+--
+   if ( readAlternativeRoom daten /= [] )
+    then 
+     do
+      print $ roomListToTempEvent $ tail $ tail $ readAlternativeRoom daten
+      print $ generateTempEvents (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
+                                 (convertListToIS ( tableList' daten )) 
+                                 (roomListToTempEvent $ tail $ tail $ readAlternativeRoom daten)
+                                 (head $ splitOn "." $ (splitOn "_" filePath) !! 1)
+--
+      Data.ByteString.Lazy.writeFile ((head $ splitOn "." $ (splitOn "_" filePath) !! 1) ++ ".json") $ encode $
+          generateTempEvents (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
+                             (convertListToIS ( tableList' daten ))
+                             (roomListToTempEvent $ tail $ tail $ readAlternativeRoom daten)
+                             (head $ splitOn "." $ (splitOn "_" filePath) !! 1)
+--       where
+--        className = (head $ splitOn "." $ (splitOn "_" filePath) !! 1)
+
+--      print $ M.lookup "braun3" $ M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers)
+--      print $ M.lookup ["braun3"] $ M.fromList $ map reverseLecturerTupel $ (M.toList transDaten) ++ (M.toList fhsLecturers)
+    else
+--     print "Keine Alternativen"
+     Data.ByteString.Lazy.writeFile ((head $ splitOn "." $ (splitOn "_" filePath) !! 1) ++ ".json") $ encode $
+        generateTempEvents (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
+                           (convertListToIS ( tableList' daten ))
+--                           (roomListToTempEvent $ tail $ tail $ readAlternativeRoom daten)
+                           []
+                           (head $ splitOn "." $ (splitOn "_" filePath) !! 1)
+
+
+-- where
+--  ( _, _, alternativRooms ) = readAlternativeRoom daten
+--   print $ readAlternativeRoom daten
 --
 -- This write the timetable in a special format in a file for a project from Marcus.
 {-
@@ -117,7 +160,7 @@ main = do
                                "2009-06-24 12:00:00"
 -}
 
-   print "End"
+--   print "End"
 {-
     where 
      (multiLecturerFile, fhsDozentJSON) =
@@ -134,6 +177,7 @@ debugConvListToIS url = do
    print $ convertListToIS $ tableList' daten
 
 --
+{-
 test_rentable =  
                            (convertISToEventS [testLecture] 
                                                 2 
@@ -154,4 +198,4 @@ test_rentable =
                          , lecturer="Braun"
                          }
 
---
+-}

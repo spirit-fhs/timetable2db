@@ -27,17 +27,6 @@ daySlot time ( slotDay, (slot : slots) ) = ((analyseSlot time slotDay slot) : ( 
 analyseSlot :: String -> String -> [String] -> Lecture
 -- ^ When in the time slot no lecture are given
 analyseSlot _ _ [] = EmptyLecture
-analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, iweek, igroup, ilecturer ] =
-     Lecture { day      = dayOfLecture
-             , timeSlot = timeStringToTimeSlot timeOfLecture
-             , vtype    = ivtype
-             , vname    = ivname
-             , location = locationStringToLocation $ removeSpaceAtEnd ilocation 
-             , week     = iweek
-             , group    = igroup
-             , lecturer = removeSpaceAtEnd ilecturer
-             }
---
 -- | This alternative is when a lecture have a alternative room.
 analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, "*", "\160", iweek, igroup, ilecturer ] = 
      Lecture { day      = dayOfLecture
@@ -47,8 +36,34 @@ analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, "*", "\
              , location = locationStringToLocation $ removeSpaceAtEnd ilocation 
              , week     = iweek
              , group    = igroup
+             , alternat = True
              , lecturer = removeSpaceAtEnd ilecturer
              }   
+--
+analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, "*", iweek, ilecturer ] =
+     Lecture { day      = dayOfLecture
+             , timeSlot = timeStringToTimeSlot timeOfLecture
+             , vtype    = ivtype
+             , vname    = ivname
+             , location = locationStringToLocation $ removeSpaceAtEnd ilocation
+             , week     = filter (/= '\160') iweek
+             , group    = ""
+             , alternat = True
+             , lecturer = removeSpaceAtEnd ilecturer
+             }
+--
+--
+analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, iweek, igroup, ilecturer ] =
+     Lecture { day      = dayOfLecture
+             , timeSlot = timeStringToTimeSlot timeOfLecture
+             , vtype    = ivtype
+             , vname    = ivname
+             , location = locationStringToLocation $ removeSpaceAtEnd ilocation 
+             , week     = iweek
+             , group    = igroup
+             , alternat = False
+             , lecturer = removeSpaceAtEnd ilecturer
+             }
 --
 -- | The exception when the location and the week are in the same string
 --  example: [" ","Vorlesung","SWEProg\160V2","H0216\160w\160","Recknagel "]
@@ -62,6 +77,7 @@ analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocationUiweek, i
             , location = locationStringToLocation $ removeSpaceAtEnd olocation 
             , week     = [oweek]
             , group    = ""
+            , alternat = False
             , lecturer = removeSpaceAtEnd ilecturer
             }
   where 
@@ -78,6 +94,7 @@ analyseSlot timeOfLecture dayOfLecture [ ivtype, ivname, ilocation, ilecturer ] 
             , location = locationStringToLocation $ removeSpaceAtEnd ilocation 
             , week     = ""
             , group    = ""
+            , alternat = False
             , lecturer = removeSpaceAtEnd ilecturer
             }   
 --
@@ -118,7 +135,9 @@ timeStringToTimeSlot ( h12 : _ : m11 : m12 : _ : h21 : h22 : _ : m21 : m22 : rst
 --   For example the building is 'H' and the room number is '0202' then the string
 --   is H0202.
 locationStringToLocation :: String -> Location
+locationStringToLocation []     = Location{building="", room=""}
 locationStringToLocation "WKST" = Location{building="B", room="WKST"}
+locationStringToLocation "PC1"  = Location{building="B", room="PC1"}
 locationStringToLocation "PC2"  = Location{building="F", room="PC2"}
 locationStringToLocation "PC3"  = Location{building="F", room="PC3"}
 -- TODO: es muss ein ordentlicher Parser gebaut werden.
