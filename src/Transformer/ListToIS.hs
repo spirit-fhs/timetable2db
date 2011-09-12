@@ -140,6 +140,10 @@ locationStringToLocation "WKST" = Location{building="B", room="WKST"}
 locationStringToLocation "PC1"  = Location{building="B", room="PC1"}
 locationStringToLocation "PC2"  = Location{building="F", room="PC2"}
 locationStringToLocation "PC3"  = Location{building="F", room="PC3"}
+--
+locationStringToLocation "PC2_"  = Location{building="F", room="PC2"}
+locationStringToLocation "WKST_"  = Location{building="B", room="WKST"}
+--
 -- TODO: es muss ein ordentlicher Parser gebaut werden.
 locationStringToLocation (room : number) = Location{building=[room], room=(removeSpaceAtEnd number)}
 --

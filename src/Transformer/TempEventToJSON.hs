@@ -65,7 +65,7 @@ instance ToJSON TempEvent where
 --
 --convertIsToTempEvent :: TimeTable -> 
 --
---
+{-
 testTransform = Data.ByteString.Lazy.writeFile "TempEvent.json" $ encode $ tempEvent
   where 
    tempEvent =    
@@ -91,4 +91,4 @@ testTransform = Data.ByteString.Lazy.writeFile "TempEvent.json" $ encode $ tempE
               , titleShort="SWE V3"
               }   
 
---
+-}
