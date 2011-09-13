@@ -14,5 +14,6 @@ requestHTML addr = withSocketsDo $ do
     let req = req0 { method = methodGet }
     res <- withManager $ httpLbs req 
     return $ BSLU.toString $ responseBody res 
+--    return $ responseBody res
 --
 --

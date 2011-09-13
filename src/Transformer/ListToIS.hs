@@ -2,6 +2,7 @@ module Transformer.ListToIS where
 --
 import Transformer.IS
 import Data.Char
+import Data.List.Split
 --
 -- | Converts the temporary structure in the TimeTable data type.
 convertListToIS :: [(String, [(String, [[String]])])] -> TimeTable
@@ -64,7 +65,7 @@ analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, iweek, 
              , alternat = False
              , lecturer = removeSpaceAtEnd ilecturer
              }
---
+{-
 -- | The exception when the location and the week are in the same string
 --  example: [" ","Vorlesung","SWEProg\160V2","H0216\160w\160","Recknagel "]
 -- analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, iweek, ilecturer ] =
@@ -82,7 +83,21 @@ analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocationUiweek, i
             }
   where 
    (olocation, oweek) = splitLocationANDWeek ilocationUiweek
+-}
 --
+analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocationUiweekOigroup, ilecturer ] =
+    Lecture { day      = dayOfLecture
+            , timeSlot = timeStringToTimeSlot timeOfLecture
+            , vtype    = ivtype
+            , vname    = ivname
+            , location = locationStringToLocation $ removeSpaceAtEnd olocation
+            , week     = oweek
+            , group    = ogroup
+            , alternat = False
+            , lecturer = removeSpaceAtEnd ilecturer
+            }
+  where
+   (olocation, oweek, ogroup) = splitLocationANDWeekAndGroup $ splitOn "\160" ilocationUiweekOigroup
 --
 --
 -- This alternative is for block events
@@ -114,6 +129,19 @@ splitLocationANDWeek :: String -> (String, Char)
 splitLocationANDWeek (' ' : x : xss) = ( [], x)
 splitLocationANDWeek ('\160' : x : xss) = ( [], x)
 splitLocationANDWeek (x : xss)       = ( x : (fst (splitLocationANDWeek xss)), (snd (splitLocationANDWeek xss)))
+--
+--
+splitLocationANDWeekAndGroup :: [String] -> (String, String, String)
+-- splitLocationANDWeekAndGroup (' ' : x1 : ' ' : x2 : xss)       = ([], x1, x2)
+splitLocationANDWeekAndGroup [ room, week, group ] = (room, week, group)
+splitLocationANDWeekAndGroup [ room, week ]        = (room, week, [])
+--
+--splitLocationANDWeekAndGroup ('\160' : x1 : '\160' : ' ' : xss) = ([], x1, )
+--splitLocationANDWeekAndGroup ('\160' : x1 : '\160' : x2 : xss) = ([], x1, x2)
+--splitLocationANDWeekAndGroup ('\160' : x1 : '\160' : xss) = ([], x1, ' ')
+--splitLocationANDWeekAndGroup (x : xss)                         = ( (x : e1) , e2, e2)
+--  where
+--   (e1, e2, e3) = splitLocationANDWeekAndGroup xss
 --
 -- | Transform a time string to a TimeSlot data type.
 timeStringToTimeSlot :: String -> TimeSlot

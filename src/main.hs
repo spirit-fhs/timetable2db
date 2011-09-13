@@ -25,6 +25,15 @@ import Transformer.AlternativeRoom.AlternativeRoom
 --
 import Data.List.Split
 import RestService
+
+import System.IO.UTF8 (putStrLn, writeFile)
+import Prelude hiding (readFile, writeFile)
+
+import qualified Data.ByteString.Lazy.Char8 as B
+import qualified Data.ByteString.Lazy.UTF8 as BSLU
+
+import Codec.Text.IConv as IConv
+--import Data.ByteString.Lazy as ByteString
 -- import qualified Data.ByteString.Lazy as L
 --
 -- filePath = "../vorlage/s_bamm6.html"
@@ -53,11 +62,17 @@ fhsDozentJSON     = "mongodb_bkp_fhsdozent.json"
 -- | The main nedds two files th MultiLecturer.txt and the 
 --   mongodb_bkp_fhsdozent.json
 --
+utf8FromLatin1 = B.unpack . convert "ISO-8859-1" "UTF-8" . B.pack
+--
+--
 main = do
    (filePath : args) <- getArgs
 --   testTableByFile filePath
 --   daten <- readFile filePath
    daten <- requestHTML filePath
+
+--   Prelude.putStrLn daten   
+--   print $ utf8FromLatin1 "\160"
 
 --   print $ head $ splitOn "." $ (splitOn "_" filePath) !! 1
 
@@ -126,6 +141,7 @@ main = do
                                  (roomListToTempEvent $ tail $ tail $ readAlternativeRoom daten)
                                  (head $ splitOn "." $ (splitOn "_" filePath) !! 1)
 --
+--      Data.ByteString.Lazy.writeFile ((head $ splitOn "." $ (splitOn "_" filePath) !! 1) ++ ".json") $ encode $
       Data.ByteString.Lazy.writeFile ((head $ splitOn "." $ (splitOn "_" filePath) !! 1) ++ ".json") $ encode $
           generateTempEvents (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
                              (convertListToIS ( tableList' daten ))

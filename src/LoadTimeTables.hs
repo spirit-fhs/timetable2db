@@ -13,6 +13,12 @@ import Transformer.Lecturer.ReadFHSLecturer
 import Transformer.TempEvent.TempEventActions
 import Transformer.AlternativeRoom.AlternativeRoom
 --
+{-
+spiritdev.fh-schmalkalden.de/news/scheduleapi/fileupload
+PUT
+content-type : application/json
+jeweils nur für einen Studiengang
+-}
 --
 loadTimeTables :: IO ()
 loadTimeTables = do
