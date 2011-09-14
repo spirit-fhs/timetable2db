@@ -12,6 +12,10 @@ For building the documentation use:
 
 A example is in the /vorlage/s_bai6_unix.html
 
+The programm needs two files: 
+ - mongodb_bkp_fhsdozent.json -> lecturer wiht details
+ - MultiLecturer.txt          -> pseudo lecturer and lecturer lists
+
 For example use ghci.
 > cd src
 > ghci
@@ -28,5 +32,8 @@ Prelude> :l main.hs
 
 Please think about the utf8 encoding.
 
-In the programm is a bug for the block events when a day have more then one lines.
+
+*Bugs:
+ - In the programm is a bug for the block events.
+   When a day description have more then one lines.
 
