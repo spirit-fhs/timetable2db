@@ -8,4 +8,11 @@
 , ("Golz", ["golz"])
 , ("H\65533ller", ["hoeller"])
 , ("B\65533se", ["boese"])
+, ("Urban_", ["urban"])
+, ("Heinze", ["heinze"])
+, ("Schmidt", ["schmidt"])
+, ("Breig", ["breig"])
+, ("M\65533ller", ["mueller"])
+, ("Englmeier_", ["engl"])
+, ("Rickes", ["rickes"])
 ]

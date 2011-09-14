@@ -78,9 +78,10 @@ mapHourOfTime "8" = "21.15-22.45"
 --
 matchLecturer lecturer fhsMap =
        case M.lookup lecturer fhsMap of
+--         Just lecturerList -> 
          Just lecturerList -> map ((flip generateMember) ( M.fromList $ map reverseLecturerTupel $ M.toList fhsMap)) lecturerList
 --         Just lecturerList -> [(flip generateMember) ( M.fromList $ map reverseLecturerTupel $ M.toList fhsMap) lecturerList]
-         _                 -> []
+         _                 -> error $ "Error lecturer: " ++ lecturer ++ " does not exist"
 --
 --
 --generateMember :: [String] -> [Member]

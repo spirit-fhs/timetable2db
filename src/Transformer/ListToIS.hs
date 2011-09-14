@@ -123,13 +123,13 @@ removeSpaceAtEnd [] = []
 removeSpaceAtEnd ( ' ' : [] ) = []
 removeSpaceAtEnd ( '\160' : [] ) = []
 removeSpaceAtEnd ( xString : xssString ) = xString : (removeSpaceAtEnd xssString)
---
+{-
 -- | This function splits the Location and week at one string by a space.
 splitLocationANDWeek :: String -> (String, Char)
 splitLocationANDWeek (' ' : x : xss) = ( [], x)
 splitLocationANDWeek ('\160' : x : xss) = ( [], x)
 splitLocationANDWeek (x : xss)       = ( x : (fst (splitLocationANDWeek xss)), (snd (splitLocationANDWeek xss)))
---
+-}
 --
 splitLocationANDWeekAndGroup :: [String] -> (String, String, String)
 -- splitLocationANDWeekAndGroup (' ' : x1 : ' ' : x2 : xss)       = ([], x1, x2)

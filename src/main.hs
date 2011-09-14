@@ -104,6 +104,7 @@ main = do
      do
       print ( convertListToIS ( tableList' daten ) )
 --      print $ map Transformer.IS.week (convertListToIS $ tableList' daten)
+      print $ (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
     else
      print ""
 --
