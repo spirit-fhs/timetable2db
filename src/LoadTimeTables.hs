@@ -8,6 +8,7 @@ import Data.ByteString.Lazy (putStrLn, writeFile)
 import qualified Data.Map as M
 import Data.Aeson.Encode
 import System.Directory
+import Data.ByteString.UTF8
 --import Data.List.Split
 --
 import Transformer.TempEventToJSON
@@ -15,6 +16,7 @@ import Transformer.Lecturer.MultiLecturer
 import Transformer.Lecturer.ReadFHSLecturer
 import Transformer.TempEvent.TempEventActions
 import Transformer.AlternativeRoom.AlternativeRoom
+import TempEventUpload
 --
 {-
 spiritdev.fh-schmalkalden.de/news/scheduleapi/fileupload
@@ -27,6 +29,17 @@ jeweils nur für einen Studiengang
 multiLecturerFile = "MultiLecturer.txt"
 fhsDozentJSON     = "mongodb_bkp_fhsdozent.json"
 --
+--
+testLoadAndUpload =
+ do
+  existFolder <- doesDirectoryExist "TimeTables"
+  if ( existFolder )
+   then
+    manualTimeTableLoad "TimeTables/"
+   else
+    do
+     createDirectory "TimeTables"
+     loadTimeTableFromWeb "http://sund.de/steffen/plan/s_bai1.html" "TimeTables/" "Bai1"
 --
 --loadTimeTables :: IO ()
 loadTimeTables = 
@@ -100,33 +113,6 @@ loadTimeTableFromWeb uri timeTableFolder timeTableName =
                      timeTableName
    else
     outputTempEvents transDaten fhsLecturers daten [] timeTableFolder timeTableName
-{-
-    do
---     print $ roomListToTempEvent $ tail $ tail $ readAlternativeRoom daten
-     Prelude.putStrLn $
-      show $ generateTempEvents (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
-                                (convertListToIS ( tableList' daten ))
-                                (roomListToTempEvent $ tail $ tail $ readAlternativeRoom daten)
-                                timeTableName
-     Data.ByteString.Lazy.writeFile (timeTableFolder ++ timeTableName ++ ".json") $ encode $
-         generateTempEvents (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
-                            (convertListToIS ( tableList' daten ))
-                            (roomListToTempEvent $ tail $ tail $ readAlternativeRoom daten)
-                            timeTableName
-   else
-    -- no alternative rooms are present
-    do
-     Prelude.putStrLn $ 
-      show $ generateTempEvents (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
-                                (convertListToIS ( tableList' daten ))
-                                []
-                                timeTableName
-     Data.ByteString.Lazy.writeFile (timeTableFolder ++ timeTableName ++ ".json") $ encode $
-         generateTempEvents (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
-                            (convertListToIS ( tableList' daten ))
-                            []
-                            timeTableName
--}
 --
 --
 outputTempEvents transDaten fhsLecturers daten alternativRooms timeTableFolder timeTableName = 
@@ -141,6 +127,14 @@ outputTempEvents transDaten fhsLecturers daten alternativRooms timeTableFolder t
                        (convertListToIS ( tableList' daten ))
                        alternativRooms
                        timeTableName
-
-
---
+  -- Upload TempEvent Json
+{-
+  reqBod <- tempEventUpload "http://spiritdev.fh-schmalkalden.de/news/scheduleapi/fileupload" 
+                            $ toString $ encode $
+    generateTempEvents (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
+                       (convertListToIS ( tableList' daten ))
+                       alternativRooms
+                       timeTableName
+--  Data.ByteString.Lazy.putStrLn reqBod
+  print "--"
+-}
