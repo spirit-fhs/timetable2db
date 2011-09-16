@@ -92,6 +92,15 @@ loadTimeTableFromWeb uri timeTableFolder timeTableName =
   if ( readAlternativeRoom daten /= [] )
    then
     -- alternative rooms are present
+    outputTempEvents transDaten 
+                     fhsLecturers 
+                     daten 
+                     (roomListToTempEvent $ tail $ tail $ readAlternativeRoom daten) 
+                     timeTableFolder 
+                     timeTableName
+   else
+    outputTempEvents transDaten fhsLecturers daten [] timeTableFolder timeTableName
+{-
     do
 --     print $ roomListToTempEvent $ tail $ tail $ readAlternativeRoom daten
      Prelude.putStrLn $
@@ -117,4 +126,21 @@ loadTimeTableFromWeb uri timeTableFolder timeTableName =
                             (convertListToIS ( tableList' daten ))
                             []
                             timeTableName
+-}
+--
+--
+outputTempEvents transDaten fhsLecturers daten alternativRooms timeTableFolder timeTableName = 
+ do
+  Prelude.putStrLn $
+    show $ generateTempEvents (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
+                              (convertListToIS ( tableList' daten ))
+                              alternativRooms
+                              timeTableName
+  Data.ByteString.Lazy.writeFile (timeTableFolder ++ timeTableName ++ ".json") $ encode $
+    generateTempEvents (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
+                       (convertListToIS ( tableList' daten ))
+                       alternativRooms
+                       timeTableName
+
+
 --
