@@ -130,7 +130,7 @@ outputTempEvents transDaten fhsLecturers daten alternativRooms timeTableFolder t
   -- Upload TempEvent Json
 {-
   reqBod <- tempEventUpload "http://spiritdev.fh-schmalkalden.de/news/scheduleapi/fileupload" 
-                            $ toString $ encode $
+                        $ encode $
     generateTempEvents (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
                        (convertListToIS ( tableList' daten ))
                        alternativRooms

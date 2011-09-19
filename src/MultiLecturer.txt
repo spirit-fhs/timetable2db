@@ -15,4 +15,7 @@
 , ("M\65533ller", ["mueller"])
 , ("Englmeier_", ["engl"])
 , ("Rickes", ["rickes"])
+, ("BeyerBraun", ["beyer","braun3"])
+, ("Heimrich_", ["heimrich"])
+, ("Heimrich", ["heimrich"])
 ]

@@ -5,7 +5,9 @@ import Network.HTTP.Enumerator
 import Network.HTTP.Types
 
 import qualified Data.ByteString.Lazy as L 
-import Data.ByteString.UTF8
+--import Data.ByteString.UTF8
+import qualified Data.ByteString.Char8 as B
+import qualified Codec.Binary.UTF8.String as BUS
 import Text.XML.Light
 -- cabal install tls http-enumerator
 --
@@ -24,7 +26,7 @@ tempEventUpload url bodyDaten = do
 --                 , checkCerts = const $ return CertificateUsageAccept
 --                 , requestBody = RequestBodyBS $ fromString $ showTopElement doc
 --                 , requestBody = RequestBodyBS $ fromString $ bodyDaten
-                 , requestBody = RequestBodyBS bodyDaten
+                 , requestBody = RequestBodyLBS (L.pack (BUS.encode bodyDaten))
                  }
   res <- withManager $ httpLbs req
 --  L.putStrLn $ responseBody res
