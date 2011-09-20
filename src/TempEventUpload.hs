@@ -26,11 +26,13 @@ tempEventUpload url bodyDaten = do
 --                 , checkCerts = const $ return CertificateUsageAccept
 --                 , requestBody = RequestBodyBS $ fromString $ showTopElement doc
 --                 , requestBody = RequestBodyBS $ fromString $ bodyDaten
-                 , requestBody = RequestBodyLBS (L.pack (BUS.encode bodyDaten))
+--                 , requestBody = RequestBodyLBS (L.pack (BUS.encode bodyDaten))
+                 , requestBody = RequestBodyLBS bodyDaten
                  }
   res <- withManager $ httpLbs req
 --  L.putStrLn $ responseBody res
-  return $ responseBody res
+--  return $ responseBody res
+  return res
 --
 --
 

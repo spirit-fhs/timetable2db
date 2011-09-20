@@ -35,7 +35,7 @@ testLoadAndUpload =
   existFolder <- doesDirectoryExist "TimeTables"
   if ( existFolder )
    then
-    manualTimeTableLoad "TimeTables/"
+    loadTimeTableFromWeb "http://sund.de/steffen/plan/s_bai1.html" "TimeTables/" "Bai1"
    else
     do
      createDirectory "TimeTables"
@@ -128,7 +128,7 @@ outputTempEvents transDaten fhsLecturers daten alternativRooms timeTableFolder t
                        alternativRooms
                        timeTableName
   -- Upload TempEvent Json
-{-
+
   reqBod <- tempEventUpload "http://spiritdev.fh-schmalkalden.de/news/scheduleapi/fileupload" 
                         $ encode $
     generateTempEvents (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
@@ -136,5 +136,5 @@ outputTempEvents transDaten fhsLecturers daten alternativRooms timeTableFolder t
                        alternativRooms
                        timeTableName
 --  Data.ByteString.Lazy.putStrLn reqBod
-  print "--"
--}
+  print reqBod
+
