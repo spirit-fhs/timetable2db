@@ -75,6 +75,13 @@ manualTimeTableLoad folder =
   loadTimeTableFromWeb "http://sund.de/steffen/plan/s_bamm4.html" folder "BaMM4"
   loadTimeTableFromWeb "http://sund.de/steffen/plan/s_bamm5.html" folder "BaMM5"
   loadTimeTableFromWeb "http://sund.de/steffen/plan/s_bamm6.html" folder "BaMM6"
+-- http://sund.de/steffen/plan/s_bais1.html
+  loadTimeTableFromWeb "http://sund.de/steffen/plan/s_bais1.html" folder "BaIS1"
+  loadTimeTableFromWeb "http://sund.de/steffen/plan/s_bais2.html" folder "BaIS2"
+  loadTimeTableFromWeb "http://sund.de/steffen/plan/s_bais3.html" folder "BaIS3"
+  loadTimeTableFromWeb "http://sund.de/steffen/plan/s_bais4.html" folder "BaIS4"
+  loadTimeTableFromWeb "http://sund.de/steffen/plan/s_bais5.html" folder "BaIS5"
+  loadTimeTableFromWeb "http://sund.de/steffen/plan/s_bais6.html" folder "BaIS6"
 --
   loadTimeTableFromWeb "http://sund.de/steffen/plan/s_mai1.html" folder "MaI1"
   loadTimeTableFromWeb "http://sund.de/steffen/plan/s_mai2.html" folder "MaI2"

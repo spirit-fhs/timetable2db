@@ -3,7 +3,8 @@ module TempEventUpload where
 --
 import Network.HTTP.Enumerator
 import Network.HTTP.Types
-
+--import Network.Browser
+--
 import qualified Data.ByteString.Lazy as L 
 --import Data.ByteString.UTF8
 import qualified Data.ByteString.Char8 as B
@@ -13,6 +14,9 @@ import Text.XML.Light
 --
 import Network.TLS (TLSCertificateUsage (CertificateUsageAccept))
 --
+--
+-- user: schedule
+-- pass: piepmatz
 --
 --tempEventUpload :: String -> String -> IO L.ByteString
 tempEventUpload url bodyDaten = do
