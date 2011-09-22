@@ -9,6 +9,7 @@ import qualified Data.Map as M
 import Data.Aeson.Encode
 import System.Directory
 import Data.ByteString.UTF8
+import qualified Data.ByteString.Lazy.UTF8 as BSLU
 --import Data.List.Split
 --
 import Transformer.TempEventToJSON
@@ -107,19 +108,19 @@ loadTimeTableFromWeb uri timeTableFolder timeTableName =
   --
   print $ "Lade: " ++ uri
   --
-  print $ tableList' daten
+  print $ tableList' $ BSLU.toString daten
   --
-  if ( readAlternativeRoom daten /= [] )
+  if ( readAlternativeRoom (BSLU.toString daten) /= [] )
    then
     -- alternative rooms are present
     outputTempEvents transDaten 
                      fhsLecturers 
-                     daten 
-                     (roomListToTempEvent $ tail $ tail $ readAlternativeRoom daten) 
+                     (BSLU.toString daten)
+                     (roomListToTempEvent $ tail $ tail $ readAlternativeRoom $ BSLU.toString daten) 
                      timeTableFolder 
                      timeTableName
    else
-    outputTempEvents transDaten fhsLecturers daten [] timeTableFolder timeTableName
+    outputTempEvents transDaten fhsLecturers (BSLU.toString daten) [] timeTableFolder timeTableName
 --
 --
 outputTempEvents transDaten fhsLecturers daten alternativRooms timeTableFolder timeTableName = 
