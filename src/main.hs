@@ -69,8 +69,8 @@ main = do
    (filePath : args) <- getArgs
 --   testTableByFile filePath
 --   daten <- readFile filePath
-   daten <- requestHTML filePath
-
+--   daten <- requestHTML filePath
+   daten <- fmap (IConv.convert "ISO-8859-1" "UTF-8") (requestHTML filePath)
 --   Prelude.putStrLn daten   
 --   print $ utf8FromLatin1 "\160"
 
@@ -78,7 +78,7 @@ main = do
 
    if debug == True 
     then
-     print $ tableList' daten
+     print $ tableList' $ BSLU.toString daten
     else
      print ""
 --   print "----------------------"
@@ -102,7 +102,7 @@ main = do
    if debug == True
     then
      do
-      print ( convertListToIS ( tableList' daten ) )
+      print ( convertListToIS ( tableList' $ BSLU.toString daten ) )
 --      print $ map Transformer.IS.week (convertListToIS $ tableList' daten)
       print $ (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
     else
@@ -115,7 +115,7 @@ main = do
     then
      Data.ByteString.Lazy.writeFile "event.json" $ encode $
 --             convertISToEventS ( convertListToIS $ tableList daten )
-             convertISToEventS ( convertListToIS ( tableList' daten ) )
+             convertISToEventS ( convertListToIS ( tableList' $ BSLU.toString daten ) )
                                2
                                (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
                                ("2009-06-24 12:00:00","2009-06-24 13:30:00")
@@ -123,7 +123,7 @@ main = do
     else
      Data.ByteString.Lazy.putStrLn $ encode $ 
 --             convertISToEventS ( convertListToIS $ tableList daten ) 
-             convertISToEventS ( convertListToIS $ tableList' daten )
+             convertISToEventS ( convertListToIS $ tableList' $ BSLU.toString daten )
                                2 
                                (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
                                ("2009-06-24 12:00:00","2009-06-24 13:30:00")
@@ -133,20 +133,20 @@ main = do
 -- Combinate the alternative rooms and the normal time table
 --
 --
-   if ( readAlternativeRoom daten /= [] )
+   if ( readAlternativeRoom (BSLU.toString daten) /= [] )
     then 
      do
-      print $ roomListToTempEvent $ tail $ tail $ readAlternativeRoom daten
+      print $ roomListToTempEvent $ tail $ tail $ readAlternativeRoom $ BSLU.toString daten
       print $ generateTempEvents (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
-                                 (convertListToIS ( tableList' daten )) 
-                                 (roomListToTempEvent $ tail $ tail $ readAlternativeRoom daten)
+                                 (convertListToIS ( tableList' $ BSLU.toString daten )) 
+                                 (roomListToTempEvent $ tail $ tail $ readAlternativeRoom $ BSLU.toString daten)
                                  (head $ splitOn "." $ (splitOn "_" filePath) !! 1)
 --
 --      Data.ByteString.Lazy.writeFile ((head $ splitOn "." $ (splitOn "_" filePath) !! 1) ++ ".json") $ encode $
       Data.ByteString.Lazy.writeFile ((head $ splitOn "." $ (splitOn "_" filePath) !! 1) ++ ".json") $ encode $
           generateTempEvents (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
-                             (convertListToIS ( tableList' daten ))
-                             (roomListToTempEvent $ tail $ tail $ readAlternativeRoom daten)
+                             (convertListToIS ( tableList' $ BSLU.toString daten ))
+                             (roomListToTempEvent $ tail $ tail $ readAlternativeRoom $ BSLU.toString daten)
                              (head $ splitOn "." $ (splitOn "_" filePath) !! 1)
 --       where
 --        className = (head $ splitOn "." $ (splitOn "_" filePath) !! 1)
@@ -157,7 +157,7 @@ main = do
 --     print "Keine Alternativen"
      Data.ByteString.Lazy.writeFile ((head $ splitOn "." $ (splitOn "_" filePath) !! 1) ++ ".json") $ encode $
         generateTempEvents (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
-                           (convertListToIS ( tableList' daten ))
+                           (convertListToIS ( tableList' $ BSLU.toString daten ))
 --                           (roomListToTempEvent $ tail $ tail $ readAlternativeRoom daten)
                            []
                            (head $ splitOn "." $ (splitOn "_" filePath) !! 1)
@@ -190,8 +190,8 @@ main = do
 --
 debugConvListToIS url = do
    daten <- requestHTML url
-   print $ tableList' daten
-   print $ convertListToIS $ tableList' daten
+   print $ tableList' $ BSLU.toString daten
+   print $ convertListToIS $ tableList' $ BSLU.toString daten
 
 --
 {-
