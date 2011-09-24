@@ -29,6 +29,7 @@ tempEventUpload url bodyDaten = do
   req0 <- parseUrl $ url
   let req = req0 { method = "PUT"
                  , requestHeaders = [ ("Content-Type", "application/json")
+                                     -- HTTP AUTH Request
                                     , ("Authorization", (B.pack ("Basic " ++ (Base64.encode "schedule:piepmatz"))))
                                     ]
 --                 , checkCerts = const $ return CertificateUsageAccept
