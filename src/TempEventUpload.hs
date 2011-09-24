@@ -11,6 +11,8 @@ import qualified Data.ByteString.Char8 as B
 import qualified Codec.Binary.UTF8.String as BUS
 import Text.XML.Light
 -- cabal install tls http-enumerator
+import qualified Codec.Binary.Base64.String as Base64
+import qualified Data.ByteString.Lazy.UTF8 as BSLU
 --
 import Network.TLS (TLSCertificateUsage (CertificateUsageAccept))
 --
@@ -26,13 +28,17 @@ tempEventUpload url bodyDaten = do
 
   req0 <- parseUrl $ url
   let req = req0 { method = "PUT"
-                 , requestHeaders = [("Content-Type", "application/json")]
+                 , requestHeaders = [ ("Content-Type", "application/json")
+                                    , ("Authorization", (B.pack ("Basic " ++ (Base64.encode "schedule:piepmatz"))))
+                                    ]
 --                 , checkCerts = const $ return CertificateUsageAccept
 --                 , requestBody = RequestBodyBS $ fromString $ showTopElement doc
 --                 , requestBody = RequestBodyBS $ fromString $ bodyDaten
 --                 , requestBody = RequestBodyLBS (L.pack (BUS.encode bodyDaten))
                  , requestBody = RequestBodyLBS bodyDaten
                  }
+--    where 
+--     auth = "Basic " ++ (encode "schedule:piepmatz")
   res <- withManager $ httpLbs req
 --  L.putStrLn $ responseBody res
 --  return $ responseBody res
