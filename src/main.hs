@@ -26,11 +26,12 @@ import Transformer.AlternativeRoom.AlternativeRoom
 import Data.List.Split
 import RestService
 
-import System.IO.UTF8 (putStrLn, writeFile)
+--import System.IO.UTF8 (putStrLn, writeFile)
 import Prelude hiding (readFile, writeFile)
 
 import qualified Data.ByteString.Lazy.Char8 as B
 import qualified Data.ByteString.Lazy.UTF8 as BSLU
+import Data.ByteString.Lazy (unpack, writeFile) 
 
 import Codec.Text.IConv as IConv
 --import Data.ByteString.Lazy as ByteString
@@ -63,6 +64,7 @@ fhsDozentJSON     = "mongodb_bkp_fhsdozent.json"
 --   mongodb_bkp_fhsdozent.json
 --
 utf8FromLatin1 = B.unpack . convert "ISO-8859-1" "UTF-8" . B.pack
+--
 --
 --
 main = do
@@ -114,6 +116,7 @@ main = do
    if outputFile == True
     then
      Data.ByteString.Lazy.writeFile "event.json" $ encode $
+--     System.IO.UTF8.writeFile "event.json" $ BSLU.toString $ encode $
 --             convertISToEventS ( convertListToIS $ tableList daten )
              convertISToEventS ( convertListToIS ( tableList' $ BSLU.toString daten ) )
                                2
@@ -143,7 +146,8 @@ main = do
                                  (head $ splitOn "." $ (splitOn "_" filePath) !! 1)
 --
 --      Data.ByteString.Lazy.writeFile ((head $ splitOn "." $ (splitOn "_" filePath) !! 1) ++ ".json") $ encode $
-      Data.ByteString.Lazy.writeFile ((head $ splitOn "." $ (splitOn "_" filePath) !! 1) ++ ".json") $ encode $
+--      Data.ByteString.Lazy.writeFile ((head $ splitOn "." $ (splitOn "_" filePath) !! 1) ++ ".json") $ encode $
+      writeFile ((head $ splitOn "." $ (splitOn "_" filePath) !! 1) ++ ".json") $ encode $
           generateTempEvents (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
                              (convertListToIS ( tableList' $ BSLU.toString daten ))
                              (roomListToTempEvent $ tail $ tail $ readAlternativeRoom $ BSLU.toString daten)
@@ -155,7 +159,8 @@ main = do
 --      print $ M.lookup ["braun3"] $ M.fromList $ map reverseLecturerTupel $ (M.toList transDaten) ++ (M.toList fhsLecturers)
     else
 --     print "Keine Alternativen"
-     Data.ByteString.Lazy.writeFile ((head $ splitOn "." $ (splitOn "_" filePath) !! 1) ++ ".json") $ encode $
+--     Data.ByteString.Lazy.writeFile ((head $ splitOn "." $ (splitOn "_" filePath) !! 1) ++ ".json") $ encode $
+     writeFile ((head $ splitOn "." $ (splitOn "_" filePath) !! 1) ++ ".json") $ encode $
         generateTempEvents (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
                            (convertListToIS ( tableList' $ BSLU.toString daten ))
 --                           (roomListToTempEvent $ tail $ tail $ readAlternativeRoom daten)
