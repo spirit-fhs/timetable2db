@@ -14,7 +14,7 @@ Executable timetable2db
   Main-is:           main.hs
   Build-depends:     base >= 4.2 && < 5
                    , tagsoup -any, bytestring -any
-                   , attoparsec -any, aeson -any
+                   , attoparsec -any, aeson <= 0.3.2.11
                    , http-types -any, http-enumerator -any
                    , network -any, utf8-string -any
                    , containers -any
