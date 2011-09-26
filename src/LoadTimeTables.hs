@@ -118,6 +118,11 @@ loadTimeTableFromWeb uri timeTableFolder timeTableName =
   --
   Prelude.print $ tableList' $ BSLU.toString daten
   --
+  Prelude.print transDaten
+  --
+  test12 <- (fmap (IConv.convert "UTF-8" "UTF-8") (fst ((M.toList transDaten) !! 6)))
+  Prelude.print $ "TransDaten: " ++ ( BSLU.toString test12 )
+  --
   if ( readAlternativeRoom (BSLU.toString daten) /= [] )
    then
     -- alternative rooms are present
