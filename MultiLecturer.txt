@@ -18,4 +18,5 @@
 , ("BeyerBraun", ["beyer","braun3"])
 , ("Heimrich_", ["heimrich"])
 , ("Heimrich", ["heimrich"])
+, ("M\252ller", ["mueller"])
 ]
