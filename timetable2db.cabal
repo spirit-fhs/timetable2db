@@ -19,6 +19,8 @@ Executable timetable2db
                    , network -any, utf8-string -any
                    , containers -any
                    , tls -any, http-enumerator -any
+                   , iconv -any, split -any, base64-string -any
+                   , xml -any, directory -any
 
 test-suite timetable2db-tests
   type: exitcode-stdio-1.0
