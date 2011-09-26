@@ -110,6 +110,7 @@ manualTimeTableLoad folder =
 loadTimeTableFromWeb uri timeTableFolder timeTableName = 
  do
   daten        <- fmap (IConv.convert "ISO-8859-1" "UTF-8") (requestHTML uri)
+--  daten        <- requestHTML uri
   transDaten   <- readMultiLecturer multiLecturerFile
   fhsLecturers <- readJSON          fhsDozentJSON
   --
