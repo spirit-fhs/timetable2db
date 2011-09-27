@@ -1,6 +1,7 @@
 module LoadTimeTables where
 --
 import HTTPRequest
+import ReadFile
 import HtmlToListV2
 import Transformer.ListToIS
 --
@@ -43,11 +44,11 @@ testLoadAndUpload =
   existFolder <- doesDirectoryExist "TimeTables"
   if ( existFolder )
    then
-    loadTimeTableFromWeb "http://sund.de/steffen/plan/s_bai1.html" "TimeTables/" "Bai1"
+    loadTimeTableFromWeb "http://sund.de/steffen/plan/block_gai.html" "TimeTables/" "test_block"
    else
     do
      createDirectory "TimeTables"
-     loadTimeTableFromWeb "http://sund.de/steffen/plan/s_bai1.html" "TimeTables/" "Bai1"
+     loadTimeTableFromWeb "http://sund.de/steffen/plan/block_gai.html" "TimeTables/" "test_block"
 --
 --loadTimeTables :: IO ()
 loadTimeTables = 
@@ -106,11 +107,19 @@ manualTimeTableLoad folder =
   loadTimeTableFromWeb "http://sund.de/steffen/plan/block_mps.html"      folder "ma_BaMM4"
   loadTimeTableFromWeb "http://sund.de/steffen/plan/block_sq_bawi4.html" folder "sl_BaWi4"
 --
+loadTimeTableFromLocal uri timeTableFolder timeTableName = 
+ do 
+  daten <- ReadFile.readFile uri
+  parseTimeTable (BSLU.fromString daten) timeTableFolder timeTableName
+--
 --loadTimeTableFromWeb :: String -> String -> IO ()
 loadTimeTableFromWeb uri timeTableFolder timeTableName = 
  do
   daten        <- fmap (IConv.convert "ISO-8859-1" "UTF-8") (requestHTML uri)
 --  daten        <- requestHTML uri
+  Prelude.print $ "Lade: " ++ uri
+  parseTimeTable daten timeTableFolder timeTableName
+{-
   transDaten   <- readMultiLecturer multiLecturerFile
   fhsLecturers <- readJSON          fhsDozentJSON
   --
@@ -118,11 +127,13 @@ loadTimeTableFromWeb uri timeTableFolder timeTableName =
   --
   Prelude.print $ tableList' $ BSLU.toString daten
   --
-  Prelude.print transDaten
-  --
-  test12 <- (fmap (IConv.convert "UTF-8" "UTF-8") (fst ((M.toList transDaten) !! 6)))
+--  Prelude.print transDaten
+{-
+  test12 <- fmap (IConv.convert "UTF-8" "UTF-8") test121
+   where
+    test121 = (fst ((M.toList transDaten) !! 6))
   Prelude.print $ "TransDaten: " ++ ( BSLU.toString test12 )
-  --
+-}
   if ( readAlternativeRoom (BSLU.toString daten) /= [] )
    then
     -- alternative rooms are present
@@ -131,6 +142,24 @@ loadTimeTableFromWeb uri timeTableFolder timeTableName =
                      (BSLU.toString daten)
                      (roomListToTempEvent $ tail $ tail $ readAlternativeRoom (BSLU.toString daten))
                      timeTableFolder 
+                     timeTableName
+   else
+    outputTempEvents transDaten fhsLecturers (BSLU.toString daten) [] timeTableFolder timeTableName
+-}
+--
+parseTimeTable daten timeTableFolder timeTableName =
+ do
+  transDaten   <- readMultiLecturer multiLecturerFile
+  fhsLecturers <- readJSON          fhsDozentJSON
+--  Prelude.print $ "Lade: " ++ uri
+  Prelude.print $ tableList' $ BSLU.toString daten
+  if ( readAlternativeRoom (BSLU.toString daten) /= [] )
+   then
+    outputTempEvents transDaten
+                     fhsLecturers
+                     (BSLU.toString daten)
+                     (roomListToTempEvent $ tail $ tail $ readAlternativeRoom (BSLU.toString daten))
+                     timeTableFolder
                      timeTableName
    else
     outputTempEvents transDaten fhsLecturers (BSLU.toString daten) [] timeTableFolder timeTableName
