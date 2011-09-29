@@ -10,7 +10,7 @@ import Data.Attoparsec hiding ( take, takeWhile )
 import Data.ByteString.Lazy (ByteString, toChunks, readFile)
 import Data.ByteString.Lazy.Internal
 -- lines
-import Data.ByteString.Lazy.UTF8 (lines)
+import Data.ByteString.Lazy.UTF8 (lines, toString, fromString)
 --
 import Transformer.Lecturer.FHSLecturerS
 --
@@ -104,8 +104,10 @@ checkChunk elem =
 --
 -- | Reads a json file as input an transform it into a Map
 readJSON filePath = do
-     jsonDaten <- Data.ByteString.Lazy.readFile filePath
-     return $ M.fromList $ filterLecturere $ map maybeJsonToFHSLecturerS $ map parseingJson (map checkChunk $ Data.ByteString.Lazy.UTF8.lines jsonDaten)
+--     jsonDaten <- Data.ByteString.Lazy.readFile filePath
+     jsonDaten <- Prelude.readFile filePath
+--     return $ M.fromList $ filterLecturere $ map maybeJsonToFHSLecturerS $ map parseingJson (map checkChunk $ Data.ByteString.Lazy.UTF8.lines jsonDaten)
+     return $ M.fromList $ filterLecturere $ map maybeJsonToFHSLecturerS $ map parseingJson (map checkChunk $ Data.ByteString.Lazy.UTF8.lines (fromString jsonDaten))
 --
 -- | Translate a list of FHSLecturerS into a list of tupls with a key value.
 filterLecturere :: [FHSLecturerS] -> [(String,[String])]

@@ -44,11 +44,13 @@ testLoadAndUpload =
   existFolder <- doesDirectoryExist "TimeTables"
   if ( existFolder )
    then
-    loadTimeTableFromWeb "http://sund.de/steffen/plan/block_gai.html" "TimeTables/" "test_block"
+--    loadTimeTableFromWeb "http://sund.de/steffen/plan/block_gai.html" "TimeTables/" "test_block"
+    loadTimeTableFromWeb "http://sund.de/steffen/plan/s_bai1.html" "TimeTables/" "Bai1"
    else
     do
      createDirectory "TimeTables"
-     loadTimeTableFromWeb "http://sund.de/steffen/plan/block_gai.html" "TimeTables/" "test_block"
+--     loadTimeTableFromWeb "http://sund.de/steffen/plan/block_gai.html" "TimeTables/" "test_block"
+     loadTimeTableFromWeb "http://sund.de/steffen/plan/s_bai1.html" "TimeTables/" "Bai1"
 --
 --loadTimeTables :: IO ()
 loadTimeTables = 
@@ -56,13 +58,17 @@ loadTimeTables =
   existFolder <- doesDirectoryExist "TimeTables"
   if ( existFolder ) 
    then 
-    manualTimeTableLoad "TimeTables/"
+    manualTimeTableLoadWeb "TimeTables/"
    else
     do
      createDirectory "TimeTables"
-     manualTimeTableLoad "TimeTables/"
+     manualTimeTableLoadWeb "TimeTables/"
 --
-manualTimeTableLoad folder =
+manualTimeTableLoadFromFiles uriToFiles targetFolder =
+ do
+  loadTimeTableFromLocal (uriToFiles ++ "s_bai6_unix.html") targetFolder "s_bai6.html"
+--
+manualTimeTableLoadWeb folder =
  do
   loadTimeTableFromWeb "http://sund.de/steffen/plan/s_bai1.html" folder "Bai1"
   loadTimeTableFromWeb "http://sund.de/steffen/plan/s_bai2.html" folder "Bai2"
