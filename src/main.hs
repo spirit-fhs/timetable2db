@@ -6,6 +6,9 @@ import HtmlToListV2
 import Transformer.ListToIS
 --
 import System.Environment
+import System.Exit
+
+
 import Data.ByteString.Lazy (putStrLn, writeFile)
 import Data.Aeson.Encode
 import qualified Data.Map as M
@@ -66,15 +69,39 @@ fhsDozentJSON     = "mongodb_bkp_fhsdozent.json"
 utf8FromLatin1 = B.unpack . convert "ISO-8859-1" "UTF-8" . B.pack
 --
 --
+--argsInterpreter :: [String] -> 
+argsInterpreter []     = "nix"
+argsInterpreter ["-h"] = "help"
 --
 main = do
    -- TODO: make good argument controling
-  loadTimeTables
-{-
-   (filePath : args) <- getArgs
+--  loadTimeTables
+
+   args <- getArgs
 --   testTableByFile filePath
 --   daten <- readFile filePath
 --   daten <- requestHTML filePath
+
+   -- Tests for argument kombinations
+   print args
+   print $ argsInterpreter args
+
+{-
+   main =  getArgs >>= parse >>= putStr . tac
+ 
+   tac  = unlines . reverse . lines
+ 
+   parse ["-h"] = usage   >> exit
+   parse ["-v"] = version >> exit
+   parse []     = getContents
+   parse fs     = concat `fmap` mapM readFile fs
+ 
+   usage   = putStrLn "Usage: tac [-vh] [file ..]"
+   version = putStrLn "Haskell tac 0.1"
+   exit    = exitWith ExitSuccess
+   die     = exitWith (ExitFailure 1)
+-}
+{-
    daten <- fmap (IConv.convert "ISO-8859-1" "UTF-8") (requestHTML filePath)
 --   Prelude.putStrLn daten   
 --   print $ utf8FromLatin1 "\160"
