@@ -21,7 +21,6 @@ Executable timetable2db
                    , tls -any, http-enumerator -any
                    , iconv -any, split -any, base64-string -any
                    , xml -any, directory -any
-                   , Cabal >= 1.9.2 
 
 test-suite timetable2db-tests
   type: exitcode-stdio-1.0
