@@ -76,15 +76,19 @@ argsInterpreter ["-h"] = "help"
 main = do
    -- TODO: make good argument controling
 --  loadTimeTables
+  (uriToFile : className : targetFolder : args) <- getArgs
+  print $ uriToFile ++ " " ++ className ++ " " ++ targetFolder
+  loadTimeTableFromLocal ( uriToFile ) targetFolder className
 
-   args <- getArgs
+--   (filePath : args) <- getArgs
+---   args <- getArgs
 --   testTableByFile filePath
 --   daten <- readFile filePath
 --   daten <- requestHTML filePath
 
    -- Tests for argument kombinations
-   print args
-   print $ argsInterpreter args
+---   print args
+---   print $ argsInterpreter args
 
 {-
    main =  getArgs >>= parse >>= putStr . tac

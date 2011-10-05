@@ -115,8 +115,14 @@ manualTimeTableLoadWeb folder =
 --
 loadTimeTableFromLocal uri timeTableFolder timeTableName = 
  do 
-  daten <- ReadFile.readFile uri
-  parseTimeTable (BSLU.fromString daten) timeTableFolder timeTableName
+  daten <- Prelude.readFile uri
+--  daten <- fmap (IConv.convert "ISO-8859-1" "UTF-8") content
+--  parseTimeTable (BSLU.fromString daten) timeTableFolder timeTableName
+  content <- fmap (IConv.convert "ISO-8859-1" "UTF-8") (ReadFile.readFile uri)
+--  Prelude.print content
+--  parseTimeTable content timeTableFolder timeTableName
+  Prelude.writeFile "tmpPlan.json" ( BSLU.toString content )
+  Prelude.print "end"
 --
 --loadTimeTableFromWeb :: String -> String -> IO ()
 loadTimeTableFromWeb uri timeTableFolder timeTableName = 
@@ -158,7 +164,7 @@ parseTimeTable daten timeTableFolder timeTableName =
   transDaten   <- readMultiLecturer multiLecturerFile
   fhsLecturers <- readJSON          fhsDozentJSON
 --  Prelude.print $ "Lade: " ++ uri
-  Prelude.print $ tableList' $ BSLU.toString daten
+---  Prelude.print $ tableList' $ BSLU.toString daten
   if ( readAlternativeRoom (BSLU.toString daten) /= [] )
    then
     outputTempEvents transDaten
@@ -173,14 +179,16 @@ parseTimeTable daten timeTableFolder timeTableName =
 --
 outputTempEvents transDaten fhsLecturers daten alternativRooms timeTableFolder timeTableName = 
  do
-  Prelude.print ( convertListToIS ( tableList' daten ) )
+---  Prelude.print ( convertListToIS ( tableList' daten ) )
 
 --  Prelude.putStrLn $
+{---
   Prelude.print $
     show $ generateTempEvents (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
                               (convertListToIS ( tableList' daten ))
                               alternativRooms
                               timeTableName
+---}
 --  Data.ByteString.Lazy.writeFile 
   System.IO.UTF8.writeFile
 --  B.writeFileBytes
