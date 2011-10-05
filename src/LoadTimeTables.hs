@@ -1,7 +1,7 @@
 module LoadTimeTables where
 --
 import HTTPRequest
-import ReadFile
+import FileOpp
 import HtmlToListV2
 import Transformer.ListToIS
 --
@@ -115,20 +115,13 @@ manualTimeTableLoadWeb folder =
 --
 loadTimeTableFromLocal uri timeTableFolder timeTableName = 
  do 
-{-
-  hSetEncoding stdin latin1
---  daten <- Prelude.readFile uri
-  fh <- openFile uri ReadMode
-  hSetEncoding fh latin1
-  contents <- System.IO.hGetContents fh
--}
-  daten <- fmap (IConv.convert "ISO-8859-1" "UTF-8") (ReadFile.readFile uri)
+----  daten <- fmap (IConv.convert "ISO-8859-1" "UTF-8") (ReadFile.readFile uri)
+  daten <- FileOpp.readFile uri
 --  parseTimeTable (BSLU.fromString daten) timeTableFolder timeTableName
---  content <- fmap (IConv.convert "ISO-8859-1" "UTF-8") (ReadFile.readFile uri)
---  Prelude.print content
 --  parseTimeTable content timeTableFolder timeTableName
----  Prelude.writeFile "tmpPlan.json" ( BSLU.toString content )
-  System.IO.UTF8.writeFile "tmpPlan.json" $ BSLU.toString daten
+
+  parseTimeTable daten timeTableFolder timeTableName
+--  FileOpp.writeFile "tmpPlan.html" $ BSLU.toString daten
   Prelude.print "end"
 --
 --loadTimeTableFromWeb :: String -> String -> IO ()
@@ -138,40 +131,14 @@ loadTimeTableFromWeb uri timeTableFolder timeTableName =
 --  daten        <- requestHTML uri
   Prelude.print $ "Lade: " ++ uri
   parseTimeTable daten timeTableFolder timeTableName
-{-
-  transDaten   <- readMultiLecturer multiLecturerFile
-  fhsLecturers <- readJSON          fhsDozentJSON
-  --
-  Prelude.print $ "Lade: " ++ uri
-  --
-  Prelude.print $ tableList' $ BSLU.toString daten
-  --
---  Prelude.print transDaten
-{-
-  test12 <- fmap (IConv.convert "UTF-8" "UTF-8") test121
-   where
-    test121 = (fst ((M.toList transDaten) !! 6))
-  Prelude.print $ "TransDaten: " ++ ( BSLU.toString test12 )
--}
-  if ( readAlternativeRoom (BSLU.toString daten) /= [] )
-   then
-    -- alternative rooms are present
-    outputTempEvents transDaten 
-                     fhsLecturers 
-                     (BSLU.toString daten)
-                     (roomListToTempEvent $ tail $ tail $ readAlternativeRoom (BSLU.toString daten))
-                     timeTableFolder 
-                     timeTableName
-   else
-    outputTempEvents transDaten fhsLecturers (BSLU.toString daten) [] timeTableFolder timeTableName
--}
+--
 --
 parseTimeTable daten timeTableFolder timeTableName =
  do
   transDaten   <- readMultiLecturer multiLecturerFile
   fhsLecturers <- readJSON          fhsDozentJSON
---  Prelude.print $ "Lade: " ++ uri
 ---  Prelude.print $ tableList' $ BSLU.toString daten
+  Prelude.print $ "fhsLecture: " ++ (show fhsLecturers)
   if ( readAlternativeRoom (BSLU.toString daten) /= [] )
    then
     outputTempEvents transDaten
@@ -186,17 +153,16 @@ parseTimeTable daten timeTableFolder timeTableName =
 --
 outputTempEvents transDaten fhsLecturers daten alternativRooms timeTableFolder timeTableName = 
  do
----  Prelude.print ( convertListToIS ( tableList' daten ) )
+  Prelude.print ( convertListToIS ( tableList' daten ) )
 
 --  Prelude.putStrLn $
-{---
   Prelude.print $
     show $ generateTempEvents (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
                               (convertListToIS ( tableList' daten ))
                               alternativRooms
                               timeTableName
----}
 --  Data.ByteString.Lazy.writeFile 
+{-
   System.IO.UTF8.writeFile
 --  B.writeFileBytes
    (timeTableFolder ++ timeTableName ++ ".json") $ BSLU.toString $ encode $
@@ -204,6 +170,14 @@ outputTempEvents transDaten fhsLecturers daten alternativRooms timeTableFolder t
                        (convertListToIS ( tableList' daten ))
                        alternativRooms
                        timeTableName
+-}
+  FileOpp.writeFile 
+   ( timeTableFolder ++ timeTableName ++ ".json") 
+   $ BSLU.toString $ encode $ generateTempEvents (M.fromList $ (M.toList transDaten) ++ (M.toList fhsLecturers))
+                                                 (convertListToIS ( tableList' daten ))
+                                                 alternativRooms
+                                                 timeTableName
+
   -- Upload TempEvent Json
 
   reqBod <- UpTemp.tempEventUpload "http://spiritdev.fh-schmalkalden.de/news/scheduleapi/fileupload" 
