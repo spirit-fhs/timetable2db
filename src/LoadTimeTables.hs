@@ -115,13 +115,20 @@ manualTimeTableLoadWeb folder =
 --
 loadTimeTableFromLocal uri timeTableFolder timeTableName = 
  do 
-  daten <- Prelude.readFile uri
---  daten <- fmap (IConv.convert "ISO-8859-1" "UTF-8") content
+{-
+  hSetEncoding stdin latin1
+--  daten <- Prelude.readFile uri
+  fh <- openFile uri ReadMode
+  hSetEncoding fh latin1
+  contents <- System.IO.hGetContents fh
+-}
+  daten <- fmap (IConv.convert "ISO-8859-1" "UTF-8") (ReadFile.readFile uri)
 --  parseTimeTable (BSLU.fromString daten) timeTableFolder timeTableName
-  content <- fmap (IConv.convert "ISO-8859-1" "UTF-8") (ReadFile.readFile uri)
+--  content <- fmap (IConv.convert "ISO-8859-1" "UTF-8") (ReadFile.readFile uri)
 --  Prelude.print content
 --  parseTimeTable content timeTableFolder timeTableName
-  Prelude.writeFile "tmpPlan.json" ( BSLU.toString content )
+---  Prelude.writeFile "tmpPlan.json" ( BSLU.toString content )
+  System.IO.UTF8.writeFile "tmpPlan.json" $ BSLU.toString daten
   Prelude.print "end"
 --
 --loadTimeTableFromWeb :: String -> String -> IO ()
