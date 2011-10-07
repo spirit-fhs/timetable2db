@@ -29,7 +29,8 @@ generateTempEvent fhsIDMap alternativeRooms className timeTable =
                                     }
            , className=className
            , eventType=IS.vtype timeTable
-           , member=matchLecturer (IS.lecturer timeTable) fhsIDMap
+           , member=[Member{fhs_id="",name=(IS.lecturer timeTable)}]
+---           , member=matchLecturer (IS.lecturer timeTable) fhsIDMap
 --           , member=[Member{ fhs_id=Event.fhs_id $ head $ IsToEvent.matchLecturer (IS.lecturer timeTable) fhsIDMap
 --                           , name=IS.lecturer timeTable
 --                           }]
