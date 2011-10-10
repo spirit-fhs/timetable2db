@@ -1,4 +1,9 @@
-This is a project for translating a existing Time Table Structure in a new Structure.
+This is a project for translating a existing time table structure in a new structure.
+
+TODO:
+ - add long names of a lecture
+ - add ics export
+ - add lecture fhs and pseudo request for mongodb
 
 Build it with:
 > cabal configure
