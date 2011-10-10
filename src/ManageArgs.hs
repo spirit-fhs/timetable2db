@@ -22,5 +22,12 @@ analyseParameter ( "-o" : target    : args ) = (Target  {path=target})    : (ana
 --analyseParameter ( "-h" : args )             = (Help    {msg=helpMessage}): (analyseParameter args)
 analyseParameter ( "-h" : args )             = [Help    {msg=helpMessage}]
 analyseParameter (_ : args) = analyseParameter args
-
-
+--
+-- searchParameter :: Parameter -> String
+-- searchParameter parameter = 
+--
+getArg :: String -> [Parameter] -> String
+getArg haveTo parameters = 
+  case haveTo of
+   "Input" -> 
+--

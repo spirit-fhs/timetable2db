@@ -79,7 +79,7 @@ main = do
 --  loadTimeTables
 
   args <- getArgs
-  analyseParameter args
+  print $ analyseParameter args
  
 {-
   (uriToFile : className : targetFolder : args) <- getArgs
