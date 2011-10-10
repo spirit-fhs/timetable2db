@@ -40,6 +40,7 @@ import Codec.Text.IConv as IConv
 --import Data.ByteString.Lazy as ByteString
 -- import qualified Data.ByteString.Lazy as L
 import LoadTimeTables
+import ManageArgs
 -- filePath = "../vorlage/s_bamm6.html"
 -- iconv --from-code=ISO-8859-1 --to-code=UTF-8 s_bamm6.html > s_bamm6_unix.html
 --
@@ -76,9 +77,15 @@ argsInterpreter ["-h"] = "help"
 main = do
    -- TODO: make good argument controling
 --  loadTimeTables
+
+  args <- getArgs
+  analyseParameter args
+ 
+{-
   (uriToFile : className : targetFolder : args) <- getArgs
   print $ uriToFile ++ " " ++ className ++ " " ++ targetFolder
   loadTimeTableFromLocal ( uriToFile ) targetFolder className
+-}
 
 --   (filePath : args) <- getArgs
 ---   args <- getArgs
