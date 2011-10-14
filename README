@@ -25,15 +25,7 @@ For example use ghci.
 > cd src
 > ghci
 Prelude> :l main.hs
-*Main> :main "http://sund.de/steffen/plan/s_bai1.html"
-*Main> :main "http://sund.de/steffen/plan/s_bai2.html"
-*Main> :main "http://sund.de/steffen/plan/s_bai6.html"
-*Main> :main "http://sund.de/steffen/plan/s_bamm6.html"
-*Main> :main "http://sund.de/steffen/plan/block_sq_bai4.html"
-*Main> :main "http://sund.de/steffen/plan/block_sq_bais6.html"
-*Main> :main "http://sund.de/steffen/plan/block_sq_bawi4.html"
-*Main> :main "http://sund.de/steffen/plan/block_mps.html"
-*Main> :main "http://sund.de/steffen/plan/block_sq_bamm6.html"
+*Main> :main "../vorlage/s_bai1.html" "bai1" "./"
 
 Please think about the utf8 encoding.
 
