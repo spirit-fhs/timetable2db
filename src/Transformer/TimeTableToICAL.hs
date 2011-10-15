@@ -1,9 +1,25 @@
+{-
+ Quelle: http://www.ietf.org/rfc/rfc2445.txt
+
+ Packages: Crypto
+
+ Examples:
+  - All to weeks -> RRULE:FREQ=WEEKLY;INTERVAL=2
+  - Every week   -> RRULE:FREQ=WEEKLY
+ 
+ Probleme:
+  - 
+  - Count weeks for the semester
+  - Count the even weeks for the semester
+  - Count the odd weeks for the semester
+-}
 module Transformer.TimeTableToICAL where
 -- 
 --
 import Transformer.Event.EventS
 import Data.Hash.MD5
 import qualified Data.Digest.SHA1 as SHA1
+import Data.Time.Calendar
 --
 {-
  BEGIN:VCALENDAR
@@ -11,7 +27,7 @@ VERSION:2.0
 PRODID:http://www.example.com/calendarapplication/
 METHOD:PUBLISH
 BEGIN:VEVENT
-UID:461092315540@example.com
+UID:461092315540@example.com -- muss eindeutig sein, darf nicht nochmal vorkommen
 ORGANIZER;CN="Alice Balder, Example Inc.":MAILTO:alice@example.com
 SUMMARY:Eine Kurzinfo
 DESCRIPTION:Beschreibung des Termines
@@ -42,32 +58,34 @@ testGen = do
   writeFile "test.ics" $ generateVcal "TEST" icalEvent
  where
   icalEvent = 
-   [ IcalEvent { uid         = "blabla@example.com"
-               , dtStart     = "20110924T080000Z"
-               , dtEnd       = "20110924T090000Z"
+   [ IcalEvent { uid         = "blabla1@example.com"
+               , dtStart     = "20110924T071500Z"
+               , dtEnd       = "20110924T084500Z"
                , dtStamp     = "20110906T151152Z"
                , vclass      = "PRIVATE"
-               , description = "Test description"
-               , summary     = "Test summary"
+               , description = "Test description 1"
+               , summary     = "Test title 1"
                }
-   , IcalEvent { uid         = "blabla@example.com"
-               , dtStart     = "20110925T080000Z"
-               , dtEnd       = "20110925T090000Z"
+   , IcalEvent { uid         = "blabla2@example.com"
+               , dtStart     = "20110924T090000Z"
+               , dtEnd       = "20110924T103000Z"
                , dtStamp     = "20110806T151152Z"
                , vclass      = "PRIVATE"
                , description = "Test description 2"
-               , summary     = "Test summary 2"
+               , summary     = "Test title 2"
                }
    ]
 --  print "End"
+--
+--
 --
 --
 generateVcal :: String -> IcalEvents -> String
 generateVcal calenderName icalEvent = 
     "BEGIN:VCALENDAR" 
  ++ "\n" ++ "VERSION:2.0"
- ++ "\n" ++ "PRODID:http://www.example.com/calendarapplication/" 
- ++ "\n" ++ "METHOD:PUBLISH"  
+ ++ "\n" ++ "PRODID:http://www.spirit.fh-schmalkalden.de/"
+ ++ "\n" ++ "METHOD:PUBLISH"
  ++ "\n" ++ "X-WR-CALNAME:" ++ calenderName
  ++ "\n" ++ "X-WR-TIMEZONE:Europe/Berlin"
  ++ "\n" ++ "X-WR-CALDESC:"
