@@ -55,6 +55,20 @@ data IcalEvent =
 --
 type IcalEvents = [IcalEvent]
 --
+{-
+  Berechnung der wochenintervalle fuer ein semester
+
+  Bsp.: 04.10.2011 -> 31.01.2012
+-}
+-- weekTypeGeneration :: 
+weekTypeGeneration = 
+  diffDays day2 day1
+   where 
+    day1 = fromGregorian 2011 10 4
+    day2 = fromGregorian 2012 1 31
+--
+-- testWeekTypeGeneration
+--
 --
 testGen = do
   print $ generateVcal "TEST" icalEvent
