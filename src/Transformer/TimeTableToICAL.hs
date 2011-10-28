@@ -1,7 +1,7 @@
 {-
  Quelle: http://www.ietf.org/rfc/rfc2445.txt
 
- Packages: Crypto
+ Packages: Crypto MissingH 
 
  Examples:
   - All to weeks -> RRULE:FREQ=WEEKLY;INTERVAL=2
@@ -12,6 +12,9 @@
   - Count weeks for the semester
   - Count the even weeks for the semester
   - Count the odd weeks for the semester
+
+ @TODO:
+  - week intervall generation form XXXX/XX/XX to YYYY/YY/YY
 -}
 module Transformer.TimeTableToICAL where
 -- 
