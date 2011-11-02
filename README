@@ -14,6 +14,11 @@ or
 For building the documentation use:
 > cabal haddock --executables
 
+For Testing:
+> cabal install test-framework-hunit test-framework
+> cabal configure --enable-tests
+> cabal build
+> cabal test
 
 A example is in the /vorlage/s_bai6_unix.html
 
