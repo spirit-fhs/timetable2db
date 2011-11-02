@@ -151,7 +151,7 @@ test_removeSpaceAtEnd_Test2 = assertBool "Test2: \"H0202\\160\""
                            )
 --
 --
---
+{-
 test_splitLocationANDWeek_Test1 = assertBool "Test1: \"H0202\\160w\\160\""
                                    ( splitLocationANDWeek "H0202\160w\160"
                                    ==
@@ -163,5 +163,5 @@ test_splitLocationANDWeek_Test2 = assertBool "Test2: \"H0202 w\""
                                    ==  
                                     ("H0202", 'w')
                                    )
---
+-}
 --
