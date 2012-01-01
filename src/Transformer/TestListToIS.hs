@@ -29,10 +29,10 @@ tests = [ testGroup "HUnit Tests in TestListToIS - convertListToIS"
           [ testCase "Test removeSpaceAtEnd_Test1" test_removeSpaceAtEnd_Test1
           , testCase "Test removeSpaceAtEnd_Test2" test_removeSpaceAtEnd_Test2
           ]
-        , testGroup "HUnit Tests in TestListToIS - splitLocationANDWeek"
-          [ testCase "Test splitLocationANDWeek_Test1" test_splitLocationANDWeek_Test1
-          , testCase "Test splitLocationANDWeek_Test2" test_splitLocationANDWeek_Test2
-          ]   
+--        , testGroup "HUnit Tests in TestListToIS - splitLocationANDWeek"
+--          [ testCase "Test splitLocationANDWeek_Test1" test_splitLocationANDWeek_Test1
+--          , testCase "Test splitLocationANDWeek_Test2" test_splitLocationANDWeek_Test2
+--          ]   
         ]
 --
 --
