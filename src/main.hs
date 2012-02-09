@@ -77,15 +77,15 @@ argsInterpreter ["-h"] = "help"
 main = do
    -- TODO: make good argument controling
 --  loadTimeTables
-
+{-
   args <- getArgs
   print $ analyseParameter args
- 
-{-
+-} 
+
   (uriToFile : className : targetFolder : args) <- getArgs
   print $ uriToFile ++ " " ++ className ++ " " ++ targetFolder
   loadTimeTableFromLocal ( uriToFile ) targetFolder className
--}
+
 
 --   (filePath : args) <- getArgs
 ---   args <- getArgs

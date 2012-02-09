@@ -69,15 +69,16 @@ data Week       = Gerade | Ungerade | Woechentlich
 -- | Beschreibt die Datenstruktur des Stundenplans. 
 --
 --
-data Lecture    = Lecture    { day      :: String   -- ^ day of a week
-                             , timeSlot :: TimeSlot -- ^ start and end Time of a schedule
-                             , vtype    :: String   -- ^ describe the type of a schedule (Vorlesung,Uebung)
-                             , vname    :: String   -- ^ the name of the schedule
-                             , location :: Location -- ^ the location of the schedule
-                             , week     :: String   -- ^ describe the week of a schedule (Gerade,Ungerade,Woechentlich)
-                             , group    :: String   -- ^ describe the group of a schedule [1..]
-                             , alternat :: Bool
-                             , lecturer :: String   -- ^ describe the dozent name that hold the schedule
+data Lecture    = Lecture    { day       :: String   -- ^ day of a week
+                             , timeSlot  :: TimeSlot -- ^ start and end Time of a schedule
+                             , vtype     :: String   -- ^ describe the type of a schedule (Vorlesung,Uebung)
+                             , vname     :: String   -- ^ the name of the schedule
+                             , location  :: Location -- ^ the location of the schedule
+                             , week      :: String   -- ^ describe the week of a schedule (Gerade,Ungerade,Woechentlich)
+                             , group     :: String   -- ^ describe the group of a schedule [1..]
+                             , alternat  :: Bool
+                             , lecturer  :: String   -- ^ describe the dozent name that hold the schedule
+                             , validDate :: String   -- ^ describe the valid date of a lecture
                              }
                 | EmptyLecture 
                              deriving (Read, Eq)

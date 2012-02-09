@@ -17,7 +17,10 @@ slotsSpliter ( time, (slot : slots) ) = (daySlot time slot) ++ (slotsSpliter (ti
 -- | Take the time and the day and filter the slots behind them.
 daySlot :: String -> (String, [[String]]) -> TimeTable
 daySlot _ ( _, [] ) = []
-daySlot time ( slotDay, (slot : slots) ) = ((analyseSlot time slotDay slot) : ( daySlot time ( slotDay, slots )) )
+daySlot time ( slotDay, (slot : slots) ) = ((analyseSlot time slotDayFilter slot) : ( daySlot time ( slotDayFilter, slots )) )
+  where
+   -- Cuts the strings after the day seperatet by ','
+   slotDayFilter = head $ splitOn "," slotDay
 -- daySlot time ( slotDay, slots) = map (analyseSlot time slotDay) slots
 --
 -- ==============================================================================================================
@@ -39,6 +42,7 @@ analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, "*", "\
              , group    = igroup
              , alternat = True
              , lecturer = removeSpaceAtEnd ilecturer
+             , validDate = ""
              }   
 --
 analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, "*", iweek, ilecturer ] =
@@ -51,6 +55,7 @@ analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, "*", iw
              , group    = ""
              , alternat = True
              , lecturer = removeSpaceAtEnd ilecturer
+             , validDate = ""
              }
 --
 --
@@ -64,6 +69,7 @@ analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocation, iweek, 
              , group    = igroup
              , alternat = False
              , lecturer = removeSpaceAtEnd ilecturer
+             , validDate = ""
              }
 {-
 -- | The exception when the location and the week are in the same string
@@ -95,6 +101,7 @@ analyseSlot timeOfLecture dayOfLecture [ " ", ivtype, ivname, ilocationUiweekOig
             , group    = ogroup
             , alternat = False
             , lecturer = removeSpaceAtEnd ilecturer
+            , validDate = ""  
             }
   where
    (olocation, oweek, ogroup) = splitLocationANDWeekAndGroup $ splitOn "\160" ilocationUiweekOigroup
@@ -111,6 +118,7 @@ analyseSlot timeOfLecture dayOfLecture [ ivtype, ivname, ilocation, ilecturer ] 
             , group    = ""
             , alternat = False
             , lecturer = removeSpaceAtEnd ilecturer
+            , validDate = ""
             }   
 --
 --
@@ -145,10 +153,17 @@ splitLocationANDWeekAndGroup [ room, week ]        = (room, week, [])
 --
 -- | Transform a time string to a TimeSlot data type.
 timeStringToTimeSlot :: String -> TimeSlot
+-- 08:15 - 19:15
+timeStringToTimeSlot ( h11 : h12 : _ : m11 : m12 : ' ' : _ : ' ' : h21 : h22 : _ : m21 : m22 : rst ) = 
+     TimeSlot { tstart = TimeStamp { hour = [h11,h12] , minute = [m11,m12] }
+              , tend   = TimeStamp { hour = [h21,h22] , minute = [m21,m22] }
+              }   
+-- 08:15-19:15
 timeStringToTimeSlot ( h11 : h12 : _ : m11 : m12 : _ : h21 : h22 : _ : m21 : m22 : rst ) =
      TimeSlot { tstart = TimeStamp { hour = [h11,h12] , minute = [m11,m12] }
               , tend   = TimeStamp { hour = [h21,h22] , minute = [m21,m22] }
               } 
+-- 8:15-19:15
 timeStringToTimeSlot ( h12 : _ : m11 : m12 : _ : h21 : h22 : _ : m21 : m22 : rst ) = 
      TimeSlot { tstart = TimeStamp { hour = [h12] , minute = [m11,m12] }
               , tend   = TimeStamp { hour = [h21,h22] , minute = [m21,m22] }
