@@ -18,12 +18,17 @@ main = defaultMain tests
 tests = [
          testGroup "HUnit Tests - One copy" 
           [ testCase "All titles are rentable." test_rentable
+--          , testCase "Standard TimeTable" test_standardTimeTable
           ]
         ]
 --
 --
 test_rentable = assertBool "moop" ( "Hallo" == "Hallo" )
---
+{-
+test_standardTimeTable = 
+  assertBool "Test"
+    ()
+-}
 --
 --
 {-

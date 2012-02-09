@@ -138,7 +138,7 @@ parseTimeTable daten timeTableFolder timeTableName =
   transDaten   <- readMultiLecturer multiLecturerFile
   fhsLecturers <- readJSON          fhsDozentJSON
 ---  Prelude.print $ tableList' $ BSLU.toString daten
-  Prelude.print $ "fhsLecture: " ++ (show fhsLecturers)
+---  Prelude.print $ "fhsLecture: " ++ (show fhsLecturers)
   if ( readAlternativeRoom (BSLU.toString daten) /= [] )
    then
     outputTempEvents transDaten

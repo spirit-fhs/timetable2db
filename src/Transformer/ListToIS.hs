@@ -131,25 +131,11 @@ removeSpaceAtEnd [] = []
 removeSpaceAtEnd ( ' ' : [] ) = []
 removeSpaceAtEnd ( '\160' : [] ) = []
 removeSpaceAtEnd ( xString : xssString ) = xString : (removeSpaceAtEnd xssString)
-{-
--- | This function splits the Location and week at one string by a space.
-splitLocationANDWeek :: String -> (String, Char)
-splitLocationANDWeek (' ' : x : xss) = ( [], x)
-splitLocationANDWeek ('\160' : x : xss) = ( [], x)
-splitLocationANDWeek (x : xss)       = ( x : (fst (splitLocationANDWeek xss)), (snd (splitLocationANDWeek xss)))
--}
+--
 --
 splitLocationANDWeekAndGroup :: [String] -> (String, String, String)
--- splitLocationANDWeekAndGroup (' ' : x1 : ' ' : x2 : xss)       = ([], x1, x2)
 splitLocationANDWeekAndGroup [ room, week, group ] = (room, week, group)
 splitLocationANDWeekAndGroup [ room, week ]        = (room, week, [])
---
---splitLocationANDWeekAndGroup ('\160' : x1 : '\160' : ' ' : xss) = ([], x1, )
---splitLocationANDWeekAndGroup ('\160' : x1 : '\160' : x2 : xss) = ([], x1, x2)
---splitLocationANDWeekAndGroup ('\160' : x1 : '\160' : xss) = ([], x1, ' ')
---splitLocationANDWeekAndGroup (x : xss)                         = ( (x : e1) , e2, e2)
---  where
---   (e1, e2, e3) = splitLocationANDWeekAndGroup xss
 --
 -- | Transform a time string to a TimeSlot data type.
 timeStringToTimeSlot :: String -> TimeSlot
