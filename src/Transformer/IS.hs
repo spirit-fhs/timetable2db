@@ -62,6 +62,8 @@ data Location   = Location   { building :: String
                              , room     :: String
                              }
                              deriving (Show, Read, Eq)
+--instance Show Location where
+--  show = building ++ room
 {-
 data Week       = Gerade | Ungerade | Woechentlich
                   deriving (Show, Read)
