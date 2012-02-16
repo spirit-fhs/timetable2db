@@ -30,6 +30,6 @@ test-suite timetable2db-tests
                      containers, QuickCheck >= 2, HUnit,
                      test-framework -any,
 --                     test-framework-quickcheck2 -any,
-                     test-framework-hunit -any
+--                     test-framework-hunit -any
   ghc-options: -O2 -Wall -fhpc -fwarn-tabs -funbox-strict-fields -threaded
                -fno-warn-unused-do-bind
