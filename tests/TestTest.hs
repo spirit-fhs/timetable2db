@@ -13,10 +13,16 @@ import Transformer.IS
 import Test.QuickCheck
 import Test.Framework (defaultMain, testGroup)
 import Test.Framework.Providers.HUnit
+--import Test.Framework.Providers.API
 import Test.HUnit
+--import Test.HUnit.Base
+--
+--main :: IO ()
+--main = defaultMain tests
 --
 main :: IO ()
-main = defaultMain tests
+main = do
+   defaultMain tests
 --
 tests = [
          testGroup "HUnit Tests - One copy" 
@@ -32,6 +38,7 @@ test_rentable = assertBool "moop" ( "Hallo" == "Hallo" )
 test_locationStringToLocation = assertBool "locationStringToLocation WKST"
                                    ((Location{building="B", room="WKST"}) ==
                                    (locationStringToLocation "WKST"))
+
 {-
 test_standardTimeTable = 
   assertBool "Test"
