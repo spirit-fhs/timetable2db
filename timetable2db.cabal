@@ -29,8 +29,8 @@ test-suite timetable2db-tests
   Main-is: TestTest.hs
   Build-depends: base >= 4.2 && < 5,
                      containers, QuickCheck >= 2, HUnit,
-                     test-framework -any,
---                     test-framework-quickcheck2 -any,
-                     test-framework-hunit -any
+                     test-framework,
+                     test-framework-quickcheck2 ,
+                     test-framework-hunit
   ghc-options: -O2 -Wall -fhpc -fwarn-tabs -funbox-strict-fields -threaded
                -fno-warn-unused-do-bind
